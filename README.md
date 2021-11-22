@@ -1,4 +1,4 @@
-# UI Interface (Nuxt.s 3) for managing User expenses
+# UI Interface (Nuxt.js 3) for managing User expenses
 
 We recommend to look at the [documentation](https://v3.nuxtjs.org).
 
