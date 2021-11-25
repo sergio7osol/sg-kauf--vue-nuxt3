@@ -9,8 +9,7 @@
   <slot />
 </template>
 <script>
-import MainHeader from "../components/MainHeader";
 export default {
-  components: {MainHeader}
+  // components: {MainHeader}
 }
 </script>
