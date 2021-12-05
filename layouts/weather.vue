@@ -1,15 +1,10 @@
 <template>
-  <MainHeader />
-  <ul>
-    <li>
-      <nuxt-link :to="{ name: 'weather-month', params: { month: 'January' } }">January</nuxt-link>
-    </li>
-    <li>
-      <nuxt-link :to="{ name: 'weather-month', params: { month: 'February' } }">February</nuxt-link>
-    </li>
-    <li>
-      <nuxt-link :to="{ name: 'weather-month', params: { month: 'March' } }">March</nuxt-link>
-    </li>
-  </ul>
-  <slot />
+  <div class="main-container">
+    <MainHeader />
+    <div class="main-content">
+      <div class="main-content__body col">
+        <slot />
+      </div>
+    </div>
+  </div>
 </template>
