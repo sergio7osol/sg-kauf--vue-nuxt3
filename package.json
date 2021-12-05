@@ -7,7 +7,8 @@
   },
   "devDependencies": {
     "nuxt3": "3.0.0-27291847.07c7a20",
-    "sass": "^1.43.5"
+    "sass": "^1.43.5",
+    "sass-loader": "10"
   },
   "dependencies": {
     "bootstrap": "^5.1.3"
