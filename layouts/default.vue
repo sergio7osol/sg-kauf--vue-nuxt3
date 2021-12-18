@@ -1,15 +1,17 @@
 <template>
   <div class="main-container">
     <MainHeader />
-    <ul>
-      <li><NuxtLink :to="{ name: 'index' }">Home</NuxtLink></li>
-      <li><NuxtLink :to="{ name: 'weather' }">Weather</NuxtLink></li>
-    </ul>
+    <div class="main-content">
+      <slot />
+    </div>
   </div>
-  <slot />
 </template>
-<script>
-export default {
-  // components: {MainHeader}
+
+<style lang="scss">
+.main-content {
+  padding-top: 3.5rem;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
 }
-</script>
+</style>
