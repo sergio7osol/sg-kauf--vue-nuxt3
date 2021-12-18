@@ -1,5 +1,7 @@
-.main {
-  &-content {
-    padding-top: 3.5rem;
-  }
+@use 'variables' as *;
+
+body {
+  font-family: $default-font-family;
+  color: $default-text-color;
+  font-size: $default-text-size;
 }
