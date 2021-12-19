@@ -1,4 +1,4 @@
 export default interface ShortDateInfo {
-    date: string,
-    count: number
+    date: string;
+    count: number;
 }
