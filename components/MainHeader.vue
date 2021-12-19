@@ -1,7 +1,7 @@
 <template>
   <header class="main-header"> <!-- navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow -->
     <NuxtLink to="/" class="navbar-brand col-md-3 col-lg-2 me-0 px-3">
-      <svg class="vue-logo" version="1.1" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.3333 0 0 -1.3333 -76.311 313.34)"><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/></g><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/></g></g></svg>
+      <svg class="main-logo" version="1.1" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.3333 0 0 -1.3333 -76.311 313.34)"><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/></g><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/></g></g></svg>
       SG Kauf
     </NuxtLink>
     <nav class="navbar navbar-expand-lg">
@@ -50,21 +50,23 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   name: 'MainHeader'
-}
+})
 </script>
 
 <style scoped lang="scss">
 @use 'assets/styles/variables' as *;
 
-.vue-logo {
+.main-logo {
   width: 2rem;
 }
 .main-header {
   padding: 0;
-  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
-  background-color: #343a40 !important;
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
+  background-color: $default-menu-bg-color !important;
   position: fixed;
   display: flex;
   align-items: center;
@@ -72,7 +74,7 @@ export default {
   width: 100%;
   z-index: 3;
   .navbar-brand, .nav-link {
-    color: #fff;
+    color: $default-menu-color;
   }
 }
 </style>

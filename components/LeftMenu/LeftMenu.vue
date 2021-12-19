@@ -2,7 +2,7 @@
   <nav id="sidebarMenu" class="d-md-block sidebar collapse vertical-menu">
     <div class="pt-3 pb-3">
       <ul class="nav flex-column vertical-menu__list">
-        <li class="nav-item vertical-menu__item" v-for="item in shoppingDates" :key="item.date">
+        <li class="nav-item vertical-menu__item" v-for="item in sortedShoppingDates" :key="item.date">
           <span v-if="item.year" class="vertical-menu__item-year">{{ item.year }}</span>
           <span v-if="item.month" class="vertical-menu__item-_month">{{ getMonthString(item.month) }}</span>
           <a v-if="item.date"
@@ -27,12 +27,13 @@
 
 <script lang="ts">
 import {
+  computed,
   defineComponent,
-  onMounted,
   reactive,
   toRefs
 } from 'vue';
 import useShoppingDates from '@/composables/useShoppingDates';
+import useSortShoppingDates from '@/composables/useSortShoppingDates'
 import ShortDateInfo from '@/types/ShortDateInfo';
 
 export default defineComponent({
@@ -40,18 +41,16 @@ export default defineComponent({
   components: {},
   setup(props) {
     console.log(props);
-    const state = reactive({
-      shoppingDates: [] as ShortDateInfo[],
-    });
+    // const state = reactive({});
     const { shoppingDates, getShoppingDates } = useShoppingDates();
-    // datesSortedUp
-    onMounted(() => {
+    const { sortedShoppingDates, changeSortOrder } = useSortShoppingDates(shoppingDates, 'ascend');
 
-    });
     return {
-      ...toRefs(state),
+      // ...toRefs(state),
       shoppingDates,
-      getShoppingDates
+      getShoppingDates,
+      sortedShoppingDates,
+      changeSortOrder
     };
   },
   methods: {
