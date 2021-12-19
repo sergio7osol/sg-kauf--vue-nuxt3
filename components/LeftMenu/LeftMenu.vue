@@ -1,10 +1,11 @@
 <template>
   <nav id="sidebarMenu" class="d-md-block sidebar collapse vertical-menu">
     <div class="pt-3 pb-3">
+      <SortBox :active-sort-order="sortOrder" @sort-order="changeSortOrder($event)" />
       <ul class="nav flex-column vertical-menu__list">
         <li class="nav-item vertical-menu__item" v-for="item in sortedShoppingDates" :key="item.date">
-          <span v-if="item.year" class="vertical-menu__item-year">{{ item.year }}</span>
-          <span v-if="item.month" class="vertical-menu__item-_month">{{ getMonthString(item.month) }}</span>
+          <!-- <span v-if="item.year" class="vertical-menu__item-year">{{ item.year }}</span> -->
+          <!-- <span v-if="item.month" class="vertical-menu__item-_month">{{ getMonthString(item.month) }}</span> -->
           <a v-if="item.date"
              class="nav-link vertical-menu__item-link"
              :class="{
@@ -26,29 +27,23 @@
 </template>
 
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  reactive,
-  toRefs
-} from 'vue';
-import useShoppingDates from '@/composables/useShoppingDates';
-import useSortShoppingDates from '@/composables/useSortShoppingDates'
-import ShortDateInfo from '@/types/ShortDateInfo';
+import { defineComponent } from 'vue';
+import useShoppingDates from '~/composables/useShoppingDates';
+import useSortShoppingDates from '~/composables/useSortShoppingDates'
+import SortBox from "~/components/LeftMenu/SortBox.vue";
 
 export default defineComponent({
   name: 'LeftMenu',
-  components: {},
-  setup(props) {
-    console.log(props);
+  components: { SortBox },
+  setup() {
     // const state = reactive({});
     const { shoppingDates, getShoppingDates } = useShoppingDates();
-    const { sortedShoppingDates, changeSortOrder } = useSortShoppingDates(shoppingDates, 'ascend');
+    const { sortOrder, sortedShoppingDates, changeSortOrder } = useSortShoppingDates(shoppingDates, 'ascend');
 
     return {
-      // ...toRefs(state),
       shoppingDates,
       getShoppingDates,
+      sortOrder,
       sortedShoppingDates,
       changeSortOrder
     };
@@ -144,10 +139,10 @@ export default defineComponent({
     &-month {
       font-size: 1rem;
     }
-  }
-  &__item-icon {
-    position: absolute;
-    left: 1rem;
+    &-icon {
+      position: absolute;
+      left: 1rem;
+    }
   }
   &__count-icon {
     position: absolute;

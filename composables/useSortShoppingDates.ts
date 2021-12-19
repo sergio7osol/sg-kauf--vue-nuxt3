@@ -33,6 +33,7 @@ export default function useSortShoppingDates(shoppingDates:  Ref<ShortDateInfo[]
     }
 
     return {
+        sortOrder,
         sortedShoppingDates,
         changeSortOrder
     }

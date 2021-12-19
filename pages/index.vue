@@ -34,7 +34,6 @@ export default {
     flex-grow: 0;
     height: 100%;
     overflow-y: auto;
-    padding-top: 2.5rem;
     padding-right: 1.1rem;
     position: relative;
     z-index: 1;
@@ -52,7 +51,7 @@ export default {
 
   &__body {
     flex-grow: 1;
-    padding: 0;
+    padding: .5rem 1rem;
     &:before {
       content: "";
       position: absolute;
