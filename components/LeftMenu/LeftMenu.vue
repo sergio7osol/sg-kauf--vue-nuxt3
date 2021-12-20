@@ -27,40 +27,51 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import useShoppingDates from '~/composables/useShoppingDates';
+import {
+  defineComponent,
+  PropType
+} from 'vue';
 import useSortShoppingDates from '~/composables/useSortShoppingDates'
 import SortBox from "~/components/LeftMenu/SortBox.vue";
+import ShortDateInfo from '@/types/ShortDateInfo';
 
 export default defineComponent({
   name: 'LeftMenu',
   components: { SortBox },
-  setup() {
+  setup(props) {
     // const state = reactive({});
-    const { shoppingDates, getShoppingDates } = useShoppingDates();
-    const { sortOrder, sortedShoppingDates, changeSortOrder } = useSortShoppingDates(shoppingDates, 'ascend');
+    const shoppingDates = computed<ShortDateInfo[]>(() => props.shoppingDates);
+    const { sortOrder, sortedShoppingDates, changeSortOrder } = useSortShoppingDates(shoppingDates);
 
     return {
-      shoppingDates,
-      getShoppingDates,
       sortOrder,
       sortedShoppingDates,
       changeSortOrder
     };
   },
-  methods: {
-    getMonthString(monthNumber: number) {
-      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      monthNumber = Number(monthNumber) - 1;
-
-      return monthNames[monthNumber];
+  props: {
+    shoppingDates: {
+      type: Array as PropType<ShortDateInfo[]>,
+      required: true
+    },
+    selectedDate: {
+      type: [String, Boolean],
+      required: false
     }
-  }
+  },
+  // methods: {
+  //   getMonthString(monthNumber: number) {
+  //     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  //     monthNumber = Number(monthNumber) - 1;
+  //
+  //     return monthNames[monthNumber];
+  //   }
+  // }
 });
 </script>
 
 <style scoped lang="scss">
-@use 'assets/styles/variables' as *;
+@use '../../assets/styles/variables' as *;
 
 .vertical-menu {
   padding: 0;

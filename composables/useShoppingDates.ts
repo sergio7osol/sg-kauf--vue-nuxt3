@@ -6,7 +6,6 @@ export default function useShoppingDates() {
     const getShoppingDates = ():void => {
         fetch('http://localhost:3030/list-dates')
             .then(response => {
-                console.log('response ShortDateInfo > ', response);
                 if (response.status !== 200) {
                     throw Error('Looks like there was a problem. Status Code: ' + response.status);
                 }

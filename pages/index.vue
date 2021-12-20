@@ -1,6 +1,6 @@
 <template>
   <div class="main-content__left-menu">
-    <LeftMenu />
+    <LeftMenu :shoppingDates="shoppingDates" />
   </div>
   <div class="main-content__body col">
     <h1>Start page</h1>
@@ -9,13 +9,20 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue';
+import LeftMenu from '@/components/LeftMenu/LeftMenu';
+import useShoppingDates from '~/composables/useShoppingDates';
+
 // :dates='shoppingDates' :selected-date='activeDate' @date-selected='getDate' :key='Date.now()'
-export default {
-  name: 'layout-default',
-  // components: { MainHeader, LeftMenu },
-  data() {
+export default defineComponent({
+  name: 'main-page',
+  components: { LeftMenu },
+  setup() {
+    const { shoppingDates, getShoppingDates } = useShoppingDates();
+
     return {
-      puki: 'lala'
+      shoppingDates,
+      getShoppingDates,
     }
   },
   created: function () {
@@ -23,7 +30,7 @@ export default {
     // this.getProductNames();
     // this.getProductDefaults();
   }
-};
+});
 </script>
 
 <style lang="scss">

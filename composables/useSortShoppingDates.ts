@@ -9,7 +9,7 @@ import SortOrder from '@/types/SortOrder';
 
 export default function useSortShoppingDates(shoppingDates:  Ref<ShortDateInfo[]>, order: SortOrder = 'ascend') {
     const sortOrder = ref(order);
-    const sortedShoppingDates = computed(datesSortedUp);
+    const sortedShoppingDates = computed<ShortDateInfo[]>(datesSortedUp);
 
     function datesSortedUp(): ShortDateInfo[] {
         const datesCopy = shoppingDates.value.slice();
