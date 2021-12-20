@@ -10,12 +10,12 @@
              class="nav-link vertical-menu__item-link"
              :class="{
                 'vertical-menu__item-link--active': item.date === selectedDate,
-                'vertical-menu__item--loading': item.date === loadingDate
+                'vertical-menu__item--loading': item.date === loadingDate && item.date !== selectedDate
              }"
              aria-current="page"
              href="#"
+             @click.prevent="chooseDate(item.date)"
           >
-            <!-- @click.prevent="chooseDate(item.date)"-->
             <span class="vertical-menu__count-icon">{{ item.count }}</span>
             <svg xmlns="http://www.w3.org/2000/svg" class="feather feather-shopping-cart vertical-menu__item-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
             <span class="vertical-menu__item-text">{{ item.date }}</span>
@@ -32,18 +32,25 @@ import {
   PropType
 } from 'vue';
 import useSortShoppingDates from '~/composables/useSortShoppingDates'
-import SortBox from "~/components/LeftMenu/SortBox.vue";
-import ShortDateInfo from '@/types/ShortDateInfo';
+import SortBox from "@/components/LeftMenu/SortBox.vue";
+import DetailedDateInfo from '@/types/DetailedDateInfo';
 
 export default defineComponent({
   name: 'LeftMenu',
   components: { SortBox },
-  setup(props) {
+  setup(props, context) {
     // const state = reactive({});
-    const shoppingDates = computed<ShortDateInfo[]>(() => props.shoppingDates);
+    const loadingDate = ref<string | boolean>(false);
+    const shoppingDates = computed<DetailedDateInfo[]>(() => props.shoppingDates);
     const { sortOrder, sortedShoppingDates, changeSortOrder } = useSortShoppingDates(shoppingDates);
+    const chooseDate = (date: string) => {
+      loadingDate.value = date;
+      context.emit('date-selected', date);
+    }
 
     return {
+      loadingDate,
+      chooseDate,
       sortOrder,
       sortedShoppingDates,
       changeSortOrder
@@ -51,7 +58,7 @@ export default defineComponent({
   },
   props: {
     shoppingDates: {
-      type: Array as PropType<ShortDateInfo[]>,
+      type: Array as PropType<DetailedDateInfo[]>,
       required: true
     },
     selectedDate: {
@@ -59,6 +66,15 @@ export default defineComponent({
       required: false
     }
   },
+  emits: {
+    // TODO: to vadidate using ts
+    'date-selected' (payload: string) {
+      const ddMmYyyy = payload.split('.');
+      const isValid = ddMmYyyy && ddMmYyyy.length === 3;
+
+      return isValid;
+    }
+  }
   // methods: {
   //   getMonthString(monthNumber: number) {
   //     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -112,7 +128,7 @@ export default defineComponent({
       border-bottom: 1px solid #777;
       transition: background-color 0.3s, color 0.3s;
       &::after {
-        content: "";
+        //content: "";
         position: absolute;
         right: 0;
         border-color: transparent;
