@@ -1,32 +1,34 @@
 <template>
   <div class="main-content__left-menu">
-    <LeftMenu :shoppingDates="shoppingDates" />
+    <LeftMenu :shoppingDates="shoppingDates" :selected-date='activeDate' @date-selected='getDate' /> <!--:key='Date.now()'-->
   </div>
   <div class="main-content__body col">
-    <h1>Start page</h1>
-    <!-- <buy-list :dateBuys="activeDateBuys" @save-product="saveProduct" @remove-product="removeProduct" /> -->
+    <BuySection :dateBuys="activeDateBuys"  /> <!-- @save-product="saveProduct" @remove-product="removeProduct"-->
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import LeftMenu from '@/components/LeftMenu/LeftMenu';
-import useShoppingDates from '~/composables/useShoppingDates';
+import useShoppingDates from '@/composables/useShoppingDates';
+import useActiveDateBuys from '@/composables/useActiveDateBuys';
+import DetailedDateInfo from '@/types/DetailedDateInfo';
+import BuyInfo from "@/types/BuyInfo";
 
-// :dates='shoppingDates' :selected-date='activeDate' @date-selected='getDate' :key='Date.now()'
 export default defineComponent({
   name: 'main-page',
-  components: { LeftMenu },
   setup() {
     const { shoppingDates, getShoppingDates } = useShoppingDates();
+    const { activeDateBuys, activeDate, getDate } = useActiveDateBuys(shoppingDates);
 
     return {
       shoppingDates,
       getShoppingDates,
+      activeDateBuys,
+      activeDate,
+      getDate
     }
   },
   created: function () {
-    // this.getAllShoppingDates();
     // this.getProductNames();
     // this.getProductDefaults();
   }
@@ -59,6 +61,7 @@ export default defineComponent({
   &__body {
     flex-grow: 1;
     padding: .5rem 1rem;
+    overflow: auto;
     &:before {
       content: "";
       position: absolute;
