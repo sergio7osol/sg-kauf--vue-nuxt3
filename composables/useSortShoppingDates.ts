@@ -4,14 +4,14 @@ import {
     Ref
 } from 'vue';
 import convertDateToMills from '@/utils/convertDateToMills';
-import ShortDateInfo from '@/types/ShortDateInfo';
+import DetailedDateInfo from '~/types/DetailedDateInfo';
 import SortOrder from '@/types/SortOrder';
 
-export default function useSortShoppingDates(shoppingDates:  Ref<ShortDateInfo[]>, order: SortOrder = 'ascend') {
+export default function useSortShoppingDates(shoppingDates:  Ref<DetailedDateInfo[]>, order: SortOrder = 'ascend') {
     const sortOrder = ref(order);
-    const sortedShoppingDates = computed<ShortDateInfo[]>(datesSortedUp);
+    const sortedShoppingDates = computed<DetailedDateInfo[]>(datesSortedUp);
 
-    function datesSortedUp(): ShortDateInfo[] {
+    function datesSortedUp(): DetailedDateInfo[] {
         const datesCopy = shoppingDates.value.slice();
         datesCopy.sort((a, b) => {
             const aDate: number = convertDateToMills(a.date);

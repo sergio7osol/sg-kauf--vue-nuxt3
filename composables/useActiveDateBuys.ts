@@ -1,29 +1,42 @@
-import { ref, onMounted } from 'vue';
-import DetailedDateInfo from '~/types/DetailedDateInfo';
+import { ref, Ref } from 'vue';
+import { readDate } from '@/services/ShoppingDateService';
+import DetailedDateInfo from '@/types/DetailedDateInfo';
+import BuyInfo from "@/types/BuyInfo";
 
-export default function useShoppingDates() {
-    const shoppingDates = ref<DetailedDateInfo[]>([]);
-    const getShoppingDates = ():void => {
-        fetch('http://localhost:3030/list-dates')
-            .then(response => {
-                if (response.status !== 200) {
-                    throw Error('Looks like there was a problem. Status Code: ' + response.status);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('incoming short date info objects: ', data.length);
-                if (data.length) {
-                    shoppingDates.value = data;
-                }
-            })
-            .catch(function(err) {
-                console.log('Fetch Error :-S in useShoppingDates: ', err);
-            });
+export default function useActiveDateBuys(shoppingDates:  Ref<DetailedDateInfo[]>) {
+    const activeDateBuys = ref<BuyInfo[]>([]);
+    const activeDate = computed(() => {
+        try {
+            return activeDateBuys.value[0].date;
+        } catch (error) {
+            console.log('No date selected. Error: ', error);
+            return false;
+        }
+    });
+    const getDate = (newDate: string) => {
+        const dateToSelect = shoppingDates.value.find(item => item.date === newDate);
+
+        if (dateToSelect) {
+            if (dateToSelect.buys) {
+                activeDateBuys.value = dateToSelect.buys.slice();
+                return true;
+            }
+            readDate(newDate)
+                .then((data: BuyInfo[]) => {
+                    if (data?.length) {
+                        dateToSelect.buys = data;
+                        activeDateBuys.value = dateToSelect.buys.slice();
+                    }
+                })
+                .catch(err => console.log('Fetch Error :-S', err));
+        } else {
+            console.warn(`Chosen date ${newDate} for loading buys was not found.`)
+        }
     };
-    onMounted(getShoppingDates);
+
     return {
-        shoppingDates,
-        getShoppingDates
+        activeDateBuys,
+        activeDate,
+        getDate
     };
 }
