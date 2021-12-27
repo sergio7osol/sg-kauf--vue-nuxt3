@@ -28,10 +28,11 @@
 
 <script lang="ts">
 import {
-  defineComponent,
-  PropType
+  defineComponent
 } from 'vue';
-import useSortShoppingDates from '~/composables/useSortShoppingDates'
+import useShoppingDates from '@/composables/useShoppingDates';
+import useActiveDateBuys from '@/composables/useActiveDateBuys';
+import useSortShoppingDates from '@/composables/useSortShoppingDates';
 import SortBox from "@/components/LeftMenu/SortBox.vue";
 import DetailedDateInfo from '@/types/DetailedDateInfo';
 
@@ -39,28 +40,32 @@ export default defineComponent({
   name: 'LeftMenu',
   components: { SortBox },
   setup(props, context) {
-    // const state = reactive({});
-    const loadingDate = ref<string | boolean>(false);
-    const shoppingDates = computed<DetailedDateInfo[]>(() => props.shoppingDates);
+    const { shoppingDates } = useShoppingDates();
     const { sortOrder, sortedShoppingDates, changeSortOrder } = useSortShoppingDates(shoppingDates);
+    const { activeDateBuys, activeDate, getDate } = useActiveDateBuys(shoppingDates);
+    const loadingDate = ref<string | boolean>(false);
+    // const shoppingDates = computed<DetailedDateInfo[]>(() => props.shoppingDates);
     const chooseDate = (date: string) => {
       loadingDate.value = date;
       context.emit('date-selected', date);
     }
 
     return {
-      loadingDate,
-      chooseDate,
       sortOrder,
       sortedShoppingDates,
+      activeDateBuys,
+      activeDate,
+      getDate,
+      loadingDate,
+      chooseDate,
       changeSortOrder
     };
   },
   props: {
-    shoppingDates: {
-      type: Array as PropType<DetailedDateInfo[]>,
-      required: true
-    },
+    // shoppingDates: {
+    //   type: Array as PropType<DetailedDateInfo[]>,
+    //   required: true
+    // },
     selectedDate: {
       type: [String, Boolean],
       required: false

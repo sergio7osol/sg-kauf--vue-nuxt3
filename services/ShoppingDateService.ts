@@ -29,6 +29,15 @@ export function readDate(newDate: string): Promise<BuyInfo[]> {
             return response.data;
         })
 }
+export function postEvent(event: any) { // new post request
+    return apiClient.post('/events', event)
+        .then(response => {
+            if (response.status !== 200) {
+                throw Error('Looks like there was a problem. Status Code: ' + response.status);
+            }
+            return response.data;
+        });
+}
 // getEvent(id) {
 //     return apiClient.get('/events/' + id)
 // }

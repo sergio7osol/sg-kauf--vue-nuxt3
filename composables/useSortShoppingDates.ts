@@ -4,7 +4,7 @@ import {
     Ref
 } from 'vue';
 import convertDateToMills from '@/utils/convertDateToMills';
-import DetailedDateInfo from '~/types/DetailedDateInfo';
+import DetailedDateInfo from '@/types/DetailedDateInfo';
 import SortOrder from '@/types/SortOrder';
 
 export default function useSortShoppingDates(shoppingDates:  Ref<DetailedDateInfo[]>, order: SortOrder = 'ascend') {

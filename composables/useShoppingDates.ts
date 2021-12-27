@@ -1,9 +1,15 @@
-import { ref, onMounted } from 'vue';
+import {
+    onMounted,
+    toRefs,
+    inject,
+    ShallowUnwrapRef
+} from 'vue';
 import { getAllDates } from '@/services/ShoppingDateService';
-import DetailedDateInfo from '@/types/DetailedDateInfo';
+import SgKaufState from '@/types/SgKaufState';
 
 export default function useShoppingDates() {
-    const shoppingDates = ref<DetailedDateInfo[]>([]);
+    const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState> };
+    const { shoppingDates } = toRefs(store.state) ;
     const getShoppingDates = ():void => {
         getAllDates()
             .then(fetchedDates => {

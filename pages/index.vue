@@ -1,32 +1,24 @@
 <template>
   <div class="main-content__left-menu">
-    <LeftMenu :shoppingDates="shoppingDates" :selected-date='activeDate' @date-selected='getDate' /> <!--:key='Date.now()'-->
+    <LeftMenu /> <!-- :selected-date='activeDate' @date-selected='getDate' :key='Date.now()'-->
   </div>
   <div class="main-content__body col">
-    <BuySection :dateBuys="activeDateBuys"  /> <!-- @save-product="saveProduct" @remove-product="removeProduct"-->
+    <BuySection  /> <!--  :dateBuys="activeDateBuys" @save-product="saveProduct" @remove-product="removeProduct" -->
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import useShoppingDates from '@/composables/useShoppingDates';
-import useActiveDateBuys from '@/composables/useActiveDateBuys';
+import { defineComponent, provide } from 'vue';
+import * as store from '@/store/index';
 import DetailedDateInfo from '@/types/DetailedDateInfo';
 import BuyInfo from "@/types/BuyInfo";
 
 export default defineComponent({
   name: 'main-page',
   setup() {
-    const { shoppingDates, getShoppingDates } = useShoppingDates();
-    const { activeDateBuys, activeDate, getDate } = useActiveDateBuys(shoppingDates);
+    provide('store', store);
 
-    return {
-      shoppingDates,
-      getShoppingDates,
-      activeDateBuys,
-      activeDate,
-      getDate
-    }
+    return {}
   },
   created: function () {
     // this.getProductNames();
