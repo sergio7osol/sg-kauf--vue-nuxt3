@@ -1,42 +1,25 @@
-import { ref, Ref } from 'vue';
-import { readDate } from '@/services/ShoppingDateService';
-import DetailedDateInfo from '@/types/DetailedDateInfo';
-import BuyInfo from "@/types/BuyInfo";
+import {
+    computed,
+    ShallowUnwrapRef
+} from 'vue';
 
-export default function useActiveDateBuys(shoppingDates:  Ref<DetailedDateInfo[]>) {
-    const activeDateBuys = ref<BuyInfo[]>([]);
-    const activeDate = computed(() => {
-        try {
-            return activeDateBuys.value[0].date;
-        } catch (error) {
-            console.log('No date selected. Error: ', error);
-            return false;
-        }
-    });
-    const getDate = (newDate: string) => {
-        const dateToSelect = shoppingDates.value.find(item => item.date === newDate);
+import SgKaufState from "@/types/SgKaufState";
 
-        if (dateToSelect) {
-            if (dateToSelect.buys) {
-                activeDateBuys.value = dateToSelect.buys.slice();
-                return true;
-            }
-            readDate(newDate)
-                .then((data: BuyInfo[]) => {
-                    if (data?.length) {
-                        dateToSelect.buys = data;
-                        activeDateBuys.value = dateToSelect.buys.slice();
-                    }
-                })
-                .catch(err => console.log('Fetch Error :-S', err));
-        } else {
-            console.warn(`Chosen date ${newDate} for loading buys was not found.`)
-        }
+export default function useActiveDateBuys() {
+    const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState>, methods: { setActiveDate: Function, setLoadingDate: Function } }; // TODO: set correct type
+    const activeDate = computed(() => store.state.activeDate);
+    const loadingDate = computed(() => store.state.loadingDate);
+    const setActiveDate = (newDate: string) => {
+        store.methods.setActiveDate(newDate);
+    };
+    const setLoadingDate = (newDate: string) => {
+        store.methods.setLoadingDate(newDate);
     };
 
     return {
-        activeDateBuys,
         activeDate,
-        getDate
+        setActiveDate,
+        loadingDate,
+        setLoadingDate
     };
 }

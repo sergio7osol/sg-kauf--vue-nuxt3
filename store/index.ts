@@ -1,34 +1,51 @@
-import SgKaufState from '~/types/SgKaufState';
+import { reactive } from 'vue';
 
-export const state = reactive<SgKaufState>({
-  isLoading: false,
-  shoppingDates: []
+import { readDate } from '@/services/ShoppingDateService';
+import SgKaufState from '@/types/SgKaufState';
+import DetailedDateInfo from "@/types/DetailedDateInfo";
+import BuyInfo from "@/types/BuyInfo";
+
+const state = reactive<SgKaufState>({
+  shoppingDates: [] as DetailedDateInfo[],
+  activeDate: {} as DetailedDateInfo,
+  loadingDate: '' // TODO: make dependent of activeDate
 });
-export const methods = {
-  setLoadingStatus (value: boolean) {
-    state.isLoading = value;
+
+const methods = {
+  setShoppingDates (newShoppingDates: DetailedDateInfo[]) {
+    state.shoppingDates = newShoppingDates;
   },
-  // fetchTodos({ state: {}, commit }, increment: number) {
-  //   commit('SET_TODOS', ['111'])
-  //   state.isLoading = !state.isLoading;
-  // }
-}
-export const getters = {
-  fn() {
-    state.isLoading = !state.isLoading;
+  setActiveDate (newDate: string) {
+    const dateToSelect = state.shoppingDates.find(item => item.date === newDate);
+    if (!dateToSelect) {
+      console.error(`Chosen date ${newDate} for loading buys was not found.`)
+      return false;
+    }
+    if (dateToSelect.buys) {
+      state.activeDate = dateToSelect;
+      methods.setLoadingDate('');
+    } else {
+      readDate(newDate)
+          .then((data: BuyInfo[]) => {
+            if (data?.length) {
+              dateToSelect.buys = data;
+              state.activeDate = dateToSelect;
+              methods.setLoadingDate('');
+            }
+          })
+          .catch(err => console.log('Fetch Error :-S', err));
+    }
+  },
+  setLoadingDate (newDate: string) {
+    state.loadingDate = newDate;
   }
 }
-// export const mutations = {
-//   SET_TODOS(state: State, todos: []) {
-//     state.todos = todos;
-//   }
-// }
-// export const getters = {
-//   myGetter(state: State) { },
-//   doneTodos(state: any) {
-//     return state.todos.filter((todo: any) => todo.done);
-//   }
-// }
+
+export default {
+  state,
+  methods
+}
+
 // export const modules = {}
 
 // state: {
@@ -48,7 +65,4 @@ export const getters = {
 //     products: []
 //   }
 // },
-// mutations: {},
-// actions: {},
-// modules: {}
 

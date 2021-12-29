@@ -9,8 +9,8 @@
           <a v-if="item.date"
              class="nav-link vertical-menu__item-link"
              :class="{
-                'vertical-menu__item-link--active': item.date === selectedDate,
-                'vertical-menu__item--loading': item.date === loadingDate && item.date !== selectedDate
+                'vertical-menu__item-link--active': item.date === activeDate.date,
+                'vertical-menu__item--loading': item.date === loadingDate
              }"
              aria-current="page"
              href="#"
@@ -28,58 +28,46 @@
 
 <script lang="ts">
 import {
-  defineComponent
+  defineComponent,
+  inject
 } from 'vue';
+import SortBox from '@/components/LeftMenu/SortBox';
 import useShoppingDates from '@/composables/useShoppingDates';
-import useActiveDateBuys from '@/composables/useActiveDateBuys';
 import useSortShoppingDates from '@/composables/useSortShoppingDates';
-import SortBox from "@/components/LeftMenu/SortBox.vue";
-import DetailedDateInfo from '@/types/DetailedDateInfo';
+import useActiveDateBuys from '@/composables/useActiveDateBuys';
 
 export default defineComponent({
   name: 'LeftMenu',
   components: { SortBox },
-  setup(props, context) {
+  setup() {
     const { shoppingDates } = useShoppingDates();
     const { sortOrder, sortedShoppingDates, changeSortOrder } = useSortShoppingDates(shoppingDates);
-    const { activeDateBuys, activeDate, getDate } = useActiveDateBuys(shoppingDates);
-    const loadingDate = ref<string | boolean>(false);
-    // const shoppingDates = computed<DetailedDateInfo[]>(() => props.shoppingDates);
+    const { activeDate, setActiveDate, loadingDate, setLoadingDate } = useActiveDateBuys();
     const chooseDate = (date: string) => {
-      loadingDate.value = date;
-      context.emit('date-selected', date);
+      setLoadingDate(date);
+      setActiveDate(date);
     }
 
     return {
-      sortOrder,
       sortedShoppingDates,
-      activeDateBuys,
-      activeDate,
-      getDate,
+      sortOrder,
+      changeSortOrder,
       loadingDate,
       chooseDate,
-      changeSortOrder
+      activeDate,
+      setActiveDate
     };
   },
-  props: {
-    // shoppingDates: {
-    //   type: Array as PropType<DetailedDateInfo[]>,
-    //   required: true
-    // },
-    selectedDate: {
-      type: [String, Boolean],
-      required: false
-    }
-  },
-  emits: {
-    // TODO: to vadidate using ts
-    'date-selected' (payload: string) {
-      const ddMmYyyy = payload.split('.');
-      const isValid = ddMmYyyy && ddMmYyyy.length === 3;
-
-      return isValid;
-    }
-  }
+  props: {},
+  // emits: {
+  //   TODO: to vadidate using ts
+  //   'date-selected' (payload: string) {
+  //     const ddMmYyyy = payload.split('.');
+  //     const isValid = ddMmYyyy && ddMmYyyy.length === 3;
+  //
+  //     return isValid;
+  //   }
+  // }
   // methods: {
   //   getMonthString(monthNumber: number) {
   //     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

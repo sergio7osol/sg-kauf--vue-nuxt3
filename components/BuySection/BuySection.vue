@@ -2,19 +2,21 @@
   <div class="buy-list">
     <h2>BuySection</h2>
     <AddNewBuy />
-    <BuyList :buys="dateBuys" />
+    <BuyList /> <!--:buys="dateBuys" -->
 <!--        @save-product="(event) => $attrs.onSaveProduct(constructProductDataForIdentification(buy.date, buy.time, event))"-->
 <!--        @remove-product="(event) => $attrs.onRemoveProduct(constructProductDataForIdentification(buy.date, buy.time, event))"-->
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
-import BuyInfo from '@/types/BuyInfo';
+import { defineComponent } from 'vue';
+import AddNewBuy from '@/components/BuySection/AddNewBuy';
+import BuyList from '@/components/BuySection/BuyList';
 // import Buy from './Buy.vue';
 
 export default defineComponent({
   name: 'BuySection',
+  components: { AddNewBuy, BuyList },
   data() {
     return {
       // emptyBuy: {
@@ -34,12 +36,8 @@ export default defineComponent({
       // }
     }
   },
-  props: {
-    dateBuys: {
-      type: Array as PropType<BuyInfo[]>
-    }
-  },
-  emits: [],
+  // props: {},
+  // emits: [],
   // methods: {
   //   constructProductDataForIdentification(date, time, product) {
   //     // product data + date + time - for full identification of the product

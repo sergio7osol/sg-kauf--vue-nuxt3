@@ -9,12 +9,13 @@
 
 <script lang="ts">
 import { defineComponent, provide } from 'vue';
-import * as store from '@/store/index';
-import DetailedDateInfo from '@/types/DetailedDateInfo';
-import BuyInfo from "@/types/BuyInfo";
+import store from '@/store/index';
+import BuySection from '@/components/BuySection/BuySection';
+import LeftMenu from '@/components/LeftMenu/LeftMenu';
 
 export default defineComponent({
   name: 'main-page',
+  components: { LeftMenu, BuySection },
   setup() {
     provide('store', store);
 
