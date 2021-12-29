@@ -1,7 +1,9 @@
 @use 'variables' as *;
+@use 'overwrites';
 
 body {
   font-family: $default-font-family;
   color: $default-text-color;
   font-size: $default-text-size;
 }
+
