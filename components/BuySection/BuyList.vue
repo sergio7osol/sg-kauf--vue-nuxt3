@@ -1,30 +1,30 @@
 <template>
   <h3>Buy list</h3>
   <ul class="list-group list-group-flush buy-list__items">
-    <li class="buy" v-for="(buy, index) in buys">
-      <Buy :buyData="buy" :key="buy.date" />
+    <li class="buy" v-for="buy in activeDate.buys" :key="buy.date">
+      <Buy :buyData="buy" />
     </li>
-    <!--        @save-product="(event) => $attrs.onSaveProduct(constructProductDataForIdentification(buy.date, buy.time, event))"-->
-    <!--        @remove-product="(event) => $attrs.onRemoveProduct(constructProductDataForIdentification(buy.date, buy.time, event))"-->
+    <!-- @save-product="(event) => $attrs.onSaveProduct(constructProductDataForIdentification(buy.date, buy.time, event))" -->
+    <!-- @remove-product="(event) => $attrs.onRemoveProduct(constructProductDataForIdentification(buy.date, buy.time, event))" -->
   </ul>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
-import BuyInfo from '@/types/BuyInfo';
+import {
+  defineComponent,
+} from 'vue';
+import useActiveDateBuys from '@/composables/useActiveDateBuys';
 
 export default defineComponent({
   name: 'BuyList',
   setup() {
+    const { activeDate } = useActiveDateBuys();
 
     return {
+      activeDate
     }
   },
-  props: {
-    buys: {
-      type: Array as PropType<BuyInfo[]>,
-    }
-  }
+  // props: {}
 })
 </script>
 

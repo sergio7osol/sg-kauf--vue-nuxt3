@@ -29,7 +29,6 @@
 <script lang="ts">
 import {
   defineComponent,
-  inject
 } from 'vue';
 import SortBox from '@/components/LeftMenu/SortBox';
 import useShoppingDates from '@/composables/useShoppingDates';
