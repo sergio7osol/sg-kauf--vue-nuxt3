@@ -1,6 +1,5 @@
 <template>
   <div class="buy-list">
-    <h2>BuySection</h2>
     <AddNewBuy />
     <BuyList /> <!--:buys="dateBuys" -->
 <!--        @save-product="(event) => $attrs.onSaveProduct(constructProductDataForIdentification(buy.date, buy.time, event))"-->
@@ -17,24 +16,9 @@ import BuyList from '@/components/BuySection/BuyList';
 export default defineComponent({
   name: 'BuySection',
   components: { AddNewBuy, BuyList },
-  data() {
-    return {
-      // emptyBuy: {
-      //   date: "",
-      //   time: "00:00",
-      //   currency: "EUR",
-      //   country: "Germany",
-      //   address: {
-      //       city: "",
-      //       index: "",
-      //       street: "",
-      //       houseNumber: ""
-      //   },
-      //   payMethod: "EC card",
-      //   shopName: "REWE",
-      //   products: []
-      // }
-    }
+  setup() {
+
+    return {};
   },
   // props: {},
   // emits: [],

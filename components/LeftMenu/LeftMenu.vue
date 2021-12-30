@@ -57,16 +57,8 @@ export default defineComponent({
       setActiveDate
     };
   },
-  props: {},
-  // emits: {
-  //   TODO: to vadidate using ts
-  //   'date-selected' (payload: string) {
-  //     const ddMmYyyy = payload.split('.');
-  //     const isValid = ddMmYyyy && ddMmYyyy.length === 3;
-  //
-  //     return isValid;
-  //   }
-  // }
+  // props: {},
+  // emits: {},
   // methods: {
   //   getMonthString(monthNumber: number) {
   //     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

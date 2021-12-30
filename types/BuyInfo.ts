@@ -3,7 +3,7 @@ import {
     PayMethod,
     ShopName
 } from '@/types/StaticBuyInfoTypes';
-import Address from '@/types/BuyAddress';
+import Address from '@/types/ShopAddress';
 import Product from '@/types/Product';
 
 export default interface BuyInfo {
