@@ -64,13 +64,16 @@ const methods = {
     urlSuffix += `&payMethod=${buy.payMethod}`;
     urlSuffix += `&shopName=${buy.shopName}`;
 
-    createBuy(urlSuffix)
+    return createBuy(urlSuffix)
         .then((data: ResponseInfo) => {
           if (data.success) {
             // TODO: implement response data validation (hash)?
             console.log('Saving buy. Success: ', data.success, ' Status: ', data.message);
             methods._addBuy(buy, existingBuy);
             methods.setActiveDate(buy.date);
+            return new Promise((resolve, reject) => {
+              resolve(true);
+            });
           } else {
             throw Error(data.message);
           }

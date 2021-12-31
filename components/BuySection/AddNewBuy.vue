@@ -41,8 +41,8 @@
                 <option v-for="method in StaticValueCollection.payMethods" :key="method">{{ method }}</option>
               </select>
               <div class="buy-info__buttons">
-                <!-- <button class="btn btn&#45;&#45;icon-remove"></button>  @click="removeBuy" -->
-                <button class="btn btn-primary btn-md buy-info__btn-add" @click.prevent="addBuy">Add buy</button>  <!--@click="saveBuy"-->
+                 <button class="btn btn--icon-remove" @click="removeBuy"></button>
+                <button class="btn btn-primary btn-md buy-info__btn-add" @click.prevent="addBuy">Add buy</button>
               </div>
             </div>
           </div>
@@ -71,7 +71,7 @@ export default defineComponent({
   setup() {
     const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState>, methods: { saveBuy: Function } }; // TODO: set correct type
     const newBuy = reactive<BuyInfo>({
-      date: "",
+      date: '',
       time: "00:00",
       currency: "EUR",
       address: {
@@ -110,7 +110,22 @@ export default defineComponent({
       payMethods: ['EC card', 'Cash', 'N26 card', 'PayPal']
     };
     const addBuy = () => {
-      store.methods.saveBuy(newBuy);
+      store.methods.saveBuy(newBuy)
+          .then((result: boolean) => {
+            newBuy.date = '';
+            newBuy.time = '00:00';
+            newBuy.currency = 'EUR';
+            newBuy.address.country = 'Germany';
+            newBuy.address.index = '';
+            newBuy.address.city = 'Hamburg';
+            newBuy.address.street = '';
+            newBuy.address.houseNumber = '';
+            newBuy.payMethod = "EC card";
+            newBuy.shopName = "Kaufland";
+          })
+          .catch(function (err: Error) {
+            console.log('Fetch Error :-S', err);
+          });
     };
 
     return {
