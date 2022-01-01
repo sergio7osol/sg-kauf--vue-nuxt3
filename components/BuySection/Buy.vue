@@ -11,6 +11,7 @@
       {{ buyData.shopName }}
       - {{ buyData.payMethod }} -
       {{ buyData.currency }}
+      <button class="btn btn--icon-remove" @click="remove(buyData)"></button>
     </caption>
     <thead class="product product--default buy-table__head">
     <tr class="buy-table__row buy-table__head-row--head">
@@ -37,14 +38,19 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
+import { ShallowUnwrapRef } from 'nuxt3/dist/app/compat/capi';
+import SgKaufState from '@/types/SgKaufState';
 import BuyInfo from '@/types/BuyInfo';
 
 export default defineComponent({
   name: 'Buy',
   components: {},
   setup() {
+    const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState>, methods: { removeBuy: Function } }; // TODO: set correct type
+    const remove = (buy: BuyInfo) => store.methods.removeBuy(buy);
 
     return {
+      remove
     }
   },
   props: {
@@ -152,11 +158,12 @@ export default defineComponent({
 .btn {
   &--icon {
     &-remove {
-      font-size: 2rem;
+      font-size: 1.7rem;
       color: #f00;
       padding-top: 0;
       padding-bottom: 0;
       line-height: 1.1;
+      vertical-align: bottom;
       &:hover {
         color: lighten(#f00, 10%);
       }

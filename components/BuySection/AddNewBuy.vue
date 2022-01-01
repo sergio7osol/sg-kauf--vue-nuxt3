@@ -41,7 +41,6 @@
                 <option v-for="method in StaticValueCollection.payMethods" :key="method">{{ method }}</option>
               </select>
               <div class="buy-info__buttons">
-                 <button class="btn btn--icon-remove" @click="removeBuy"></button>
                 <button class="btn btn-primary btn-md buy-info__btn-add" @click.prevent="addBuy">Add buy</button>
               </div>
             </div>
@@ -110,7 +109,8 @@ export default defineComponent({
       payMethods: ['EC card', 'Cash', 'N26 card', 'PayPal']
     };
     const addBuy = () => {
-      store.methods.saveBuy(newBuy)
+      const buyToAdd = JSON.parse(JSON.stringify(newBuy));
+      store.methods.saveBuy(buyToAdd)
           .then((result: boolean) => {
             newBuy.date = '';
             newBuy.time = '00:00';
@@ -272,24 +272,5 @@ export default defineComponent({
 .card {
   background-color: #ddd !important;
 }
-.btn {
-  &--icon {
-    &-remove {
-      font-size: 2rem;
-      color: #f00;
-      padding-top: 0;
-      padding-bottom: 0;
-      line-height: 1.1;
-      &:hover {
-        color: lighten(#f00, 10%);
-      }
-      &:active {
-        color: darken(#f00, 10%);
-      }
-      &::before {
-        content: "\2718";
-      }
-    }
-  }
-}
+
 </style>

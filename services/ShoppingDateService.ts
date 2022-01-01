@@ -49,6 +49,15 @@ export function createBuy(dataSuffix: string): Promise<ResponseInfo> {
             return response.data;
         });
 }
+export function deleteBuy(dataSuffix: string): Promise<BuyInfo[]> {
+    return apiClient.get('/remove-buy?' + dataSuffix)
+        .then(response => {
+            if (response.status !== 200) {
+                throw Error('Looks like there was a problem. Status Code: ' + response.status);
+            }
+            return response.data;
+        });
+}
 
 // getEvent(id) {
 //     return apiClient.get('/events/' + id)
