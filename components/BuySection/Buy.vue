@@ -1,7 +1,6 @@
 <template>
-  <table class="table table-striped product-list__items mt-3 buy-table">
+  <table class="table table-striped product-list__items buy-table">
     <caption class="buy-table__caption">
-      {{ buyData.date }}
       {{ buyData.time }},
       {{ buyData.address.country }}
       {{ buyData.address.index }}
