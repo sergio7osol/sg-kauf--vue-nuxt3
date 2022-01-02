@@ -3,17 +3,25 @@ import { reactive } from 'vue';
 import {
   createBuy,
   deleteBuy,
-  readDate
+  readDate,
+  getProductNames,
+  getProductDefaults
 } from '@/services/ShoppingDateService';
 import SgKaufState from '@/types/SgKaufState';
 import DetailedDateInfo from "@/types/DetailedDateInfo";
 import BuyInfo from "@/types/BuyInfo";
 import ResponseInfo from "@/types/ResponseInfo";
+import Product from "@/types/Product";
 
 const state = reactive<SgKaufState>({
   shoppingDates: [] as DetailedDateInfo[],
   activeDate: {} as DetailedDateInfo,
-  loadingDate: '' // TODO: make dependent of activeDate
+  loadingDate: '', // TODO: make dependent of activeDate
+  ValueCollection: {
+    names: [],
+    defaults: [],
+    measures: ["piece", "kg"]
+  }
 });
 
 const methods = {
@@ -136,6 +144,32 @@ const methods = {
           console.log('Fetch Error :-S', err);
         });
   },
+  fetchProductNames() {
+    getProductNames()
+        .then((productNames: string[]) => {
+          if (!productNames || !productNames.length) {
+            console.error("Product names should be an Array of Strings. Got no products. Returning...");
+            return false;
+          }
+          methods._setCollectionProductNames(productNames);
+        })
+        .catch(function (err) {
+          console.log('Fetch Error :-S', err);
+        });
+  },
+  fetchProductDefaults() {
+    getProductDefaults()
+        .then((productDefaults: Array<string | Product>) => {
+          if (!productDefaults || !productDefaults.length) {
+            console.log('Product defaults should be an Array of product names or objects. Got no product defaults. Returning...');
+            return false;
+          }
+          methods._setCollectionProductDefaults(productDefaults);
+        })
+        .catch(function (err) {
+          console.log("getProductDefaults, Fetch Error :-S", err);
+        });
+  },
   _addBuy(newBuy: BuyInfo, storedDate: DetailedDateInfo | undefined, storedBuy: BuyInfo | undefined) {
     if (!storedDate) {
       storedDate = {
@@ -158,6 +192,12 @@ const methods = {
       storedDate?.buys?.push(newBuy);
     }
   },
+  _setCollectionProductNames(names: string[]) {
+    state.ValueCollection.names = names;
+  },
+  _setCollectionProductDefaults(defaults: (string | Product)[]) {
+    state.ValueCollection.defaults = defaults as [];
+  }
 }
 
 export default {

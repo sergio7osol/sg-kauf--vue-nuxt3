@@ -1,8 +1,8 @@
 import axios, {AxiosResponse} from 'axios';
 import DetailedDateInfo from '@/types/DetailedDateInfo';
 import BuyInfo from "@/types/BuyInfo";
-import ResponseInfo
-    from "~/types/ResponseInfo";
+import Product from "@/types/Product";
+import ResponseInfo from "@/types/ResponseInfo";
 
 const apiClient = axios.create({
     baseURL: 'http://localhost:3030',
@@ -58,7 +58,24 @@ export function deleteBuy(dataSuffix: string): Promise<BuyInfo[]> {
             return response.data;
         });
 }
-
+export function getProductNames(): Promise<string[]> {
+    return apiClient.get('/get-product-names')
+        .then(response => {
+            if (response.status !== 200) {
+                throw Error('Looks like there was a problem. Status Code: ' + response.status);
+            }
+            return response.data;
+        });
+}
+export function getProductDefaults(): Promise<Array<string | Product>> {
+    return apiClient.get('/get-product-defaults')
+        .then(response => {
+            if (response.status !== 200) {
+                throw Error('Looks like there was a problem. Status Code: ' + response.status);
+            }
+            return response.data;
+        });
+}
 // getEvent(id) {
 //     return apiClient.get('/events/' + id)
 // }

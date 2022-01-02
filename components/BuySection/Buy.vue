@@ -14,22 +14,27 @@
     </caption>
     <thead class="product product--default buy-table__head">
     <tr class="buy-table__row buy-table__head-row--head">
-      <th class="buy-table__cell buy-table__head-cell--head">Name</th>
-      <th class="buy-table__cell buy-table__head-cell--head">Price</th>
-      <th class="buy-table__cell buy-table__head-cell--head">Weight/Amount</th>
-      <th class="buy-table__cell buy-table__head-cell--head">Measure</th>
-      <th class="buy-table__cell buy-table__head-cell--head">Description</th>
-      <th class="buy-table__cell buy-table__head-cell--head">Discount</th>
+      <th scope="col" class="buy-table__cell buy-table__head-cell--head">#</th>
+      <th scope="col" class="buy-table__cell buy-table__head-cell--head">Name</th>
+      <th scope="col" class="buy-table__cell buy-table__head-cell--head">Price</th>
+      <th scope="col" class="buy-table__cell buy-table__head-cell--head">Weight/Amount</th>
+      <th scope="col" class="buy-table__cell buy-table__head-cell--head">Measure</th>
+      <th scope="col" class="buy-table__cell buy-table__head-cell--head">Description</th>
+      <th scope="col" class="buy-table__cell buy-table__head-cell--head">Discount</th>
+      <th scope="col" class="buy-table__cell buy-table__cell--actions buy-table__head-cell--head">Actions</th>
     </tr>
     </thead>
     <tbody class="product">
+    <AddProductTableRow   />
     <tr v-for="product in buyData.products" class="buy-table__row buy-table__head-row--body">
+      <th scope="row" class="buy-table__cell buy-table__head-cell--body">{{ index }}</th>
       <td class="buy-table__cell buy-table__head-cell--body">{{ product.name }}</td>
       <td class="buy-table__cell buy-table__head-cell--body">{{ product.price }}</td>
       <td class="buy-table__cell buy-table__head-cell--body">{{ product.weightAmount }}</td>
       <td class="buy-table__cell buy-table__head-cell--body">{{ product.measure }}</td>
       <td class="buy-table__cell buy-table__head-cell--body">{{ product.description }}</td>
       <td class="buy-table__cell buy-table__head-cell--body">{{ product.discount }}</td>
+      <td class="buy-table__cell buy-table__cell--actions buy-table__head-cell--body">Remove</td>
     </tr>
     </tbody>
   </table>
@@ -37,13 +42,14 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
+import AddProductTableRow from "@/components/Product/AddProductTableRow";
 import { ShallowUnwrapRef } from 'nuxt3/dist/app/compat/capi';
 import SgKaufState from '@/types/SgKaufState';
 import BuyInfo from '@/types/BuyInfo';
 
 export default defineComponent({
   name: 'Buy',
-  components: {},
+  components: { AddProductTableRow },
   setup() {
     const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState>, methods: { removeBuy: Function } }; // TODO: set correct type
     const remove = (buy: BuyInfo) => store.methods.removeBuy(buy);
@@ -64,6 +70,11 @@ export default defineComponent({
 .buy-table {
   &__caption {
     caption-side: top;
+  }
+  &__cell {
+    &--actions {
+      text-align: center;
+    }
   }
 }
 .buy-info {
