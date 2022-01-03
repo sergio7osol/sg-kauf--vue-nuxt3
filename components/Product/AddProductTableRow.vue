@@ -71,8 +71,8 @@
             class="btn btn-success btn-sm product-info__btn-add text-nowrap"
             type="button"
             ref="saveProductButton"
+            @click.prevent="sendProductToSave"
         >
-          <!-- @click.prevent="sendProductToSave" -->
           Save product
         </button>
       </div>
@@ -81,14 +81,20 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
+import {
+  ref,
+  toRefs
+} from 'vue';
 import useCollectionDefaults from '@/composables/useCollectionDefaults';
 import Product from '@/types/Product';
+import { ShallowUnwrapRef } from 'nuxt3/dist/app/compat/capi';
+import SgKaufState from '@/types/SgKaufState';
 
 export default defineComponent({
   name: 'AddProductTableRow',
   components: {},
-  setup() {
+  setup(props) {
+    const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState>, methods: { saveProduct: Function } };
     const { ValueCollection, findDefaultValue } = useCollectionDefaults();
     const newProduct = reactive<Product>({
       name: '',
@@ -99,6 +105,24 @@ export default defineComponent({
       discount: 0
     });
     const saveProductButton = ref<HTMLButtonElement | null>(null);
+    const sendProductToSave = () => {
+      const date = props.date;
+      const time = props.time;
+      const { name, price, weightAmount, measure, description, discount } = newProduct;
+      if (!name || !price || !weightAmount || !measure) {
+        return console.warn('Name, price, weight/amount are required attributes and should be provided for saving a product. Returning...');
+      }
+
+      store.methods.saveProduct(date, time, {...newProduct})
+          .then((data: boolean) => {
+            newProduct.name = '';
+            newProduct.price = 0;
+            newProduct.weightAmount = 0;
+            newProduct.measure = 'piece';
+            newProduct.description = '';
+            newProduct.discount = 0;
+          });
+    }
     const focusSaveProductButton = () => {
       saveProductButton?.value?.focus();
     }
@@ -126,7 +150,18 @@ export default defineComponent({
       newProduct,
       ValueCollection,
       productAutocomplete,
-      saveProductButton
+      saveProductButton,
+      sendProductToSave
+    }
+  },
+  props: {
+    date: {
+      type: String,
+      required: true
+    },
+    time: {
+      type: String,
+      required: true
     }
   }
 });

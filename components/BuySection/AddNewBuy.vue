@@ -139,6 +139,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+@use '../../assets/styles/variables';
 .buy {
   counter-increment: buy-counter;
 
@@ -265,6 +266,7 @@ export default defineComponent({
   }
   &__btn-add {
     margin-left: .4rem;
+    background-color: variables.$default-select-button-bg;
   }
 }
 
@@ -272,5 +274,4 @@ export default defineComponent({
 .card {
   background-color: #ddd !important;
 }
-
 </style>
