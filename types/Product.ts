@@ -6,5 +6,5 @@ export default interface Product {
     weightAmount: number,
     measure: Measure,
     description: string,
-    discount: number
+    discount: number | string
 }
