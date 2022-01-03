@@ -25,16 +25,21 @@
     </tr>
     </thead>
     <tbody class="product">
-    <AddProductTableRow   />
-    <tr v-for="product in buyData.products" class="buy-table__row buy-table__head-row--body">
-      <th scope="row" class="buy-table__cell buy-table__head-cell--body">{{ index }}</th>
+    <AddProductTableRow :date="buyData.date" :time="buyData.time" />
+    <tr v-for="(product, index) in buyData.products" class="buy-table__row buy-table__head-row--body">
+      <th scope="row" class="buy-table__cell buy-table__head-cell--body">{{ index + 1 }}</th>
       <td class="buy-table__cell buy-table__head-cell--body">{{ product.name }}</td>
       <td class="buy-table__cell buy-table__head-cell--body">{{ product.price }}</td>
       <td class="buy-table__cell buy-table__head-cell--body">{{ product.weightAmount }}</td>
       <td class="buy-table__cell buy-table__head-cell--body">{{ product.measure }}</td>
       <td class="buy-table__cell buy-table__head-cell--body">{{ product.description }}</td>
       <td class="buy-table__cell buy-table__head-cell--body">{{ product.discount }}</td>
-      <td class="buy-table__cell buy-table__cell--actions buy-table__head-cell--body">Remove</td>
+      <td class="buy-table__cell buy-table__cell--actions buy-table__head-cell--body">
+        <button
+          class="btn btn--icon-remove"
+          @click.prevent="sendProductToRemove(buyData.date, buyData.time, product)"
+        ></button>
+      </td>
     </tr>
     </tbody>
   </table>
@@ -46,16 +51,21 @@ import AddProductTableRow from "@/components/Product/AddProductTableRow";
 import { ShallowUnwrapRef } from 'nuxt3/dist/app/compat/capi';
 import SgKaufState from '@/types/SgKaufState';
 import BuyInfo from '@/types/BuyInfo';
+import Product from '@/types/Product';
 
 export default defineComponent({
   name: 'Buy',
   components: { AddProductTableRow },
   setup() {
-    const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState>, methods: { removeBuy: Function } }; // TODO: set correct type
+    const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState>, methods: { removeBuy: Function, removeProduct: Function } }; // TODO: set correct type
     const remove = (buy: BuyInfo) => store.methods.removeBuy(buy);
+    const sendProductToRemove = (date: string, time: string, productInfoForRemove: Product) => {
+      store.methods.removeProduct(date, time, productInfoForRemove);
+    }
 
     return {
-      remove
+      remove,
+      sendProductToRemove
     }
   },
   props: {

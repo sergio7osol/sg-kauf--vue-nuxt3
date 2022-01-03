@@ -1,4 +1,5 @@
 export default interface ResponseInfo {
     success: boolean;
-    message: string
+    message: string;
+    error?: string;
 }

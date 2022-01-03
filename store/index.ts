@@ -1,11 +1,14 @@
 import { reactive } from 'vue';
+import { find } from 'lodash';
 
 import {
   createBuy,
   deleteBuy,
   readDate,
   getProductNames,
-  getProductDefaults
+  getProductDefaults,
+  createProduct,
+  removeProduct
 } from '@/services/ShoppingDateService';
 import SgKaufState from '@/types/SgKaufState';
 import DetailedDateInfo from "@/types/DetailedDateInfo";
@@ -43,6 +46,7 @@ const methods = {
           .then((data: BuyInfo[]) => {
             if (data?.length) {
               dateToSelect.buys = data;
+              (dateToSelect.count !== undefined && dateToSelect.count !== null) && Reflect.deleteProperty(dateToSelect, 'count');
               state.activeDate = dateToSelect;
               methods.setLoadingDate('');
             }
@@ -170,6 +174,94 @@ const methods = {
           console.log("getProductDefaults, Fetch Error :-S", err);
         });
   },
+  saveProduct(date: string, time: string, productInfo: Product) {
+    let { name, price, weightAmount, measure, description, discount } = productInfo;
+
+    const dateToAddProductTo = state.shoppingDates.find(shoppingDate => shoppingDate.date === date);
+    if (!dateToAddProductTo) {
+      console.error(`Date ${date} to add the product to - is not found`);
+      return false;
+    }
+    const buyToAddProductTo = dateToAddProductTo.buys?.find(buy => buy.time === time);
+    if (!buyToAddProductTo) {
+      console.error(`Buy at ${time} to add the product to - is not found`);
+      return false;
+    }
+    const existingProducts = buyToAddProductTo.products = buyToAddProductTo.products || [];
+
+    if (find(existingProducts, productInfo)) {
+      console.warn(`Product array already has such a product: ${productInfo.name}. Product will NOT be added. Returning...`);
+      return false;
+    }
+
+    name = encodeURIComponent(name);
+    let url = `date=${date}&time=${time}`;
+    url += name ? `&name=${name}` : '';
+    url += price ? `&price=${price}` : '';
+    url += weightAmount ? `&weightAmount=${weightAmount}` : '';
+    url += measure ? `&measure=${measure}` : '';
+    url += description ? `&description=${description}` : '';
+    url += discount ? `&discount=${discount}` : '';
+
+    return createProduct(url)
+        .then((data: Product[]) => { // TODO: change to response with one added product
+          buyToAddProductTo.products = data;
+          // react to changed products if same date is active
+          // thisApp.displayNewProductState(thisApp.activeDateBuys, buyToAddProductTo, dateToAddProductTo, 'add');
+          return new Promise(resolve => {
+            resolve(true);
+          });
+        })
+        .catch(function (err) {
+          console.log('Fetch Error :-S', err);
+        });
+  },
+  removeProduct(date: string, time: string, productInfoForRemove: Product) {
+    const { name, price, weightAmount, measure, description, discount } = productInfoForRemove;
+
+    if (confirm('You sure, you want to delete this product?')) {
+      console.log(`Prompted deleting of the product. Confirmed. The product ${name} on ${date} at ${time} is going to be deleted...`);
+    } else {
+      console.log(`Prompted deleting of the product. Rejected. The product ${name} on ${date} at ${time} is NOT going to be deleted.`);
+      return false;
+    }
+
+    const nameEncoded = encodeURIComponent(name);
+    let url = `date=${date}&time=${time}&name=${nameEncoded}&price=${price}&weightAmount=${weightAmount}&measure=${measure}&discount=${discount}`;
+    url += description ? `&description=${description}` : '';
+
+    return removeProduct(url)
+        .then((data) => {
+          console.log('DATA. ', data);
+          if (!data.success) {
+            console.log('Error. Program stops. ', data.error);
+            return false;
+          }
+          console.log(`Server response -> operation completed: status: ${data.success ? 'success' : 'failure'}, description: ${data.message}`);
+          const dateToRemoveProductFrom = state.shoppingDates?.find(shoppingDate => shoppingDate.date === date);
+          if (!dateToRemoveProductFrom) {
+            console.error(`Date ${date} to remove the product from - is not found`);
+            return false;
+          }
+          const buyToRemoveProductFrom = dateToRemoveProductFrom.buys?.find(buy => buy.time === time);
+          if (!buyToRemoveProductFrom) {
+            console.error(`Buy at ${time} to remove the product from - is not found`);
+            return false;
+          }
+          const resultProducts = buyToRemoveProductFrom.products.filter(buy => {
+            const isProductToDelete = buy.name === name && buy.price === price && buy.weightAmount === weightAmount && buy.measure === measure && buy.discount === discount && buy.description === description;
+            return isProductToDelete ? false : true;
+          });
+          if (buyToRemoveProductFrom.products.length === resultProducts.length) {
+            console.log(`Product for deletion ${name} was not found locally on ${date} at ${time}`);
+            return false;
+          }
+          buyToRemoveProductFrom.products = resultProducts;
+        })
+        .catch(function (err) {
+          console.log('Fetch Error :-S', err);
+        });
+  },
   _addBuy(newBuy: BuyInfo, storedDate: DetailedDateInfo | undefined, storedBuy: BuyInfo | undefined) {
     if (!storedDate) {
       storedDate = {
@@ -197,7 +289,7 @@ const methods = {
   },
   _setCollectionProductDefaults(defaults: (string | Product)[]) {
     state.ValueCollection.defaults = defaults as [];
-  }
+  },
 }
 
 export default {

@@ -76,6 +76,24 @@ export function getProductDefaults(): Promise<Array<string | Product>> {
             return response.data;
         });
 }
+export function createProduct(dataSuffix: string): Promise<Product[]> {
+    return apiClient.get(`/save-product?${dataSuffix}`)
+        .then(response => {
+            if (response.status !== 200) {
+                throw Error('Looks like there was a problem. Status Code: ' + response.status);
+            }
+            return response.data;
+        })
+}
+export function removeProduct(dataSuffix: string): Promise<ResponseInfo> {
+    return apiClient.get(`/remove-product?${dataSuffix}`)
+        .then(response => {
+            if (response.status !== 200) {
+                throw Error('Looks like there was a problem. Status Code: ' + response.status);
+            }
+            return response.data;
+        })
+}
 // getEvent(id) {
 //     return apiClient.get('/events/' + id)
 // }
