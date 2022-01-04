@@ -32,7 +32,7 @@
               inputFormat="dd.MM.yyyy"
           />
         </div>
-        <button class="btn btn-success mt-4 sum-calc__submit" @click="sendCalcSum">Calculate Sum</button>
+        <button class="btn btn-success mt-4 sum-calc__submit" @click="getCalcSum">Calculate Sum</button>
         <button class="btn btn-info mt-3 sum-calc__submit" @click="sendGetWholeSum">Get whole Sum</button>
       </div>
     </div>
@@ -54,27 +54,42 @@ import SgKaufState from "@/types/SgKaufState";
 export default defineComponent({
   name: 'SumCalc',
   components: { Datepicker },
-  setup(props) {
+  setup() {
     const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState>, methods: { getRangeSum: Function, getWholeSum: Function } };
     const dateRange = reactive<DateRange>({
       from: new Date(2021, 0, 15),
       to: new Date()
     });
     const currency: Currency = 'EUR'; // TODO: implement dynamic currency exchange / calculating different currencies separately
-    const price = ref<PriceInfo>({cost: 0, discount: 0});
-    const roundedCost = computed(() => price.value.cost ? price.value.cost.toFixed(2) : 0);
-    const roundedDiscount = computed(() => price.value.discount ? price.value.discount.toFixed(2) : 0);
-    const roundedSum = computed(() => (price.value.cost - price.value.discount).toFixed(2));
+    const calculatedSum = ref<PriceInfo>({cost: 0, discount: 0});
+    const roundedCost = computed(() => calculatedSum.value.cost ? calculatedSum.value.cost.toFixed(2) : 0);
+    const roundedDiscount = computed(() => calculatedSum.value.discount ? calculatedSum.value.discount.toFixed(2) : 0);
+    const roundedSum = computed(() => (calculatedSum.value.cost - calculatedSum.value.discount).toFixed(2));
 
-    const sendCalcSum = () => {
+    const sendGetWholeSum = () => {
+      store.methods.getWholeSum()
+          .then((result: any) => {
+            calculatedSum.value = result;
+          })
+          .catch((err: Error) => {
+            console.log('Fetch Error :-S', err);
+          });
+    };
+
+    const getCalcSum = () => {
       const from = getDateString(dateRange.from);
-      var dateRange1 = dateRange;
       const to = getDateString(dateRange.to);
 
-      // this.$emit('get-calc-sum', {from, to});
+      const urlSuffix = `from=${from}&to=${to}`;
+      store.methods.getRangeSum(urlSuffix)
+          .then((data: PriceInfo) => {
+            calculatedSum.value = data;
+          })
+          .catch(function(err: unknown) {
+            console.log('Fetch Error :-S', err);
+          });
 
-      function getDateString(dateString: Date) {
-        const date = new Date(dateString);
+      function getDateString(date: Date) {
         const day = String(date.getDate());
         const dayNormalized = day.length < 2 ? '0' + day : day;
         const month = String(date.getMonth() + 1);
@@ -86,28 +101,6 @@ export default defineComponent({
         return dateNormalized;
       }
     };
-    const sendGetWholeSum = () => {
-      store.methods.getWholeSum()
-          .then((result: any) => {
-            price.value = result;
-          })
-          .catch((err: Error) => {
-            console.log('Fetch Error :-S', err);
-          });
-    };
-
-    const calculatedSum = ref<PriceInfo>({ cost: 0, discount: 0});
-    const getCalcSum = (range: DateRange) => {
-      console.log('RANGE send: ', range);
-      const urlSuffix = `from=${range.from}&to=${range.to}`;
-      store.methods.getRangeSum(urlSuffix)
-          .then((data: PriceInfo) => {
-            calculatedSum.value = data;
-          })
-          .catch(function(err: unknown) {
-            console.log('getCalcSum', 'Fetch Error :-S', err);
-          });
-    };
 
     return {
       from: dateRange.from,
@@ -116,7 +109,7 @@ export default defineComponent({
       roundedCost,
       roundedDiscount,
       roundedSum,
-      sendCalcSum,
+      getCalcSum,
       sendGetWholeSum
     };
   }
