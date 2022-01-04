@@ -9,7 +9,7 @@
       </svg>
     </div>
     <Sum />
-    <!-- <SumCalc :amount="calculatedSum" :currency="activeCurrency" @get-calc-sum="getCalcSum" @get-whole-sum="getWholeSum" /> &lt;!&ndash; TODO: currency exchange |:dateRange=""| &ndash;&gt;-->
+    <SumCalc /> <!-- :amount="calculatedSum" :currency="activeCurrency" @get-calc-sum="getCalcSum" @get-whole-sum="getWholeSum"  |:dateRange=""| -->
   </h4>
   <ul class="list-group list-group-flush buy-list__items">
     <li class="buy" v-for="buy in activeDate.buys" :key="buy.date">
@@ -27,8 +27,6 @@ import {
 import useActiveDateBuys from '@/composables/useActiveDateBuys';
 import { ShallowUnwrapRef } from 'nuxt3/dist/app/compat/capi';
 import SgKaufState from '@/types/SgKaufState';
-import DateRange from '@/types/DateRange';
-import PriceInfo from '@/types/PriceInfo';
 
 export default defineComponent({
   name: 'BuyList',
@@ -36,23 +34,8 @@ export default defineComponent({
     const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState>, methods: { getRangeSum: Function } };
     const { activeDate } = useActiveDateBuys();
 
-    const calculatedSum = ref<PriceInfo>({ cost: 0, discount: 0});
-    const getCalcSum = (range: DateRange) => {
-      console.log('RANGE send: ', range);
-      const urlSuffix = `from=${range.from}&to=${range.to}`;
-      store.methods.getRangeSum(urlSuffix)
-          .then((data: PriceInfo) => {
-            calculatedSum.value = data;
-          })
-          .catch(function(err: unknown) {
-            console.log('getCalcSum', 'Fetch Error :-S', err);
-          });
-    };
-
     return {
-      activeDate,
-      calculatedSum,
-      getCalcSum
+      activeDate
     }
   },
 // props: {}

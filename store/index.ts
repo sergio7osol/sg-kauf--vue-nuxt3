@@ -1,4 +1,4 @@
-import { reactive } from 'vue';
+import { reactive, readonly } from 'vue';
 import { find } from 'lodash';
 
 import {
@@ -8,13 +8,16 @@ import {
   getProductNames,
   getProductDefaults,
   createProduct,
-  removeProduct
+  removeProduct,
+  fetchRangeSum,
+  fetchWholeSum
 } from '@/services/ShoppingDateService';
 import SgKaufState from '@/types/SgKaufState';
 import DetailedDateInfo from "@/types/DetailedDateInfo";
 import BuyInfo from "@/types/BuyInfo";
 import ResponseInfo from "@/types/ResponseInfo";
 import Product from "@/types/Product";
+import PriceInfo from "@/types/PriceInfo";
 
 const state = reactive<SgKaufState>({
   shoppingDates: [] as DetailedDateInfo[],
@@ -262,6 +265,26 @@ const methods = {
           console.log('Fetch Error :-S', err);
         });
   },
+  getRangeSum(dataSuffix: string) {
+    return fetchRangeSum(dataSuffix);
+  },
+  getWholeSum() {
+    return fetchWholeSum()
+        .then((data) => {
+              const wholeSum = data.wholeSum;
+              return new Promise((resolve, reject) => {
+                if (wholeSum && typeof wholeSum === 'object' && typeof wholeSum.cost === 'number' && typeof wholeSum.discount === 'number') {
+                  resolve(wholeSum);
+                } else {
+                  reject(data);
+                }
+              });
+            }
+        )
+        .catch(function(err) {
+          console.log('getWholeSum', 'Fetch Error :-S', err);
+        });
+  },
   _addBuy(newBuy: BuyInfo, storedDate: DetailedDateInfo | undefined, storedBuy: BuyInfo | undefined) {
     if (!storedDate) {
       storedDate = {
@@ -293,7 +316,7 @@ const methods = {
 }
 
 export default {
-  state,
+  state: readonly(state),
   methods
 }
 

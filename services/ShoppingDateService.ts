@@ -1,8 +1,9 @@
 import axios, {AxiosResponse} from 'axios';
 import DetailedDateInfo from '@/types/DetailedDateInfo';
-import BuyInfo from "@/types/BuyInfo";
-import Product from "@/types/Product";
-import ResponseInfo from "@/types/ResponseInfo";
+import BuyInfo from '@/types/BuyInfo';
+import Product from '@/types/Product';
+import ResponseInfo from '@/types/ResponseInfo';
+import PriceInfo from '@/types/PriceInfo';
 
 const apiClient = axios.create({
     baseURL: 'http://localhost:3030',
@@ -94,6 +95,21 @@ export function removeProduct(dataSuffix: string): Promise<ResponseInfo> {
             return response.data;
         })
 }
-// getEvent(id) {
-//     return apiClient.get('/events/' + id)
-// }
+export function fetchRangeSum(dataSuffix: string): Promise<number> {
+    return apiClient.get(`/get-calc-sum?${dataSuffix}`)
+        .then(response => {
+            if (response.status !== 200) {
+                throw Error('Looks like there was a problem. Status Code: ' + response.status);
+            }
+            return response.data;
+        })
+}
+export function fetchWholeSum(): Promise<{ wholeSum: PriceInfo }> {
+    return apiClient.get('/get-whole-sum')
+        .then(response => {
+            if (response.status !== 200) {
+                throw Error('Looks like there was a problem. Status Code: ' + response.status);
+            }
+            return response.data;
+        })
+}
