@@ -2486,6 +2486,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"date-fns@npm:^2.22.1":
+  version: 2.28.0
+  resolution: "date-fns@npm:2.28.0"
+  checksum: a0516b2e4f99b8bffc6cc5193349f185f195398385bdcaf07f17c2c4a24473c99d933eb0018be4142a86a6d46cb0b06be6440ad874f15e795acbedd6fd727a1f
+  languageName: node
+  linkType: hard
+
 "debug@npm:2.6.9":
   version: 2.6.9
   resolution: "debug@npm:2.6.9"
@@ -6346,6 +6353,7 @@ __metadata:
     nuxt3: 3.0.0-27291847.07c7a20
     sass: ^1.43.5
     sass-loader: 10
+    vue3-datepicker: ^0.3.1
     vuex: next
   languageName: unknown
   linkType: soft
@@ -7412,6 +7420,17 @@ __metadata:
     hash-sum: ^1.0.2
     loader-utils: ^1.0.2
   checksum: ef79d0c6329303d69c87f128f67e486bd37e9a8d416aa662edafae62fab727117b7452f50be8b11fe0c4cb43992344d5ef6a46b206f375fca4d37ae5a5b99185
+  languageName: node
+  linkType: hard
+
+"vue3-datepicker@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "vue3-datepicker@npm:0.3.1"
+  dependencies:
+    date-fns: ^2.22.1
+  peerDependencies:
+    vue: ^3.0.0
+  checksum: db0bf4197293b31eb2f52b3a00a9e4cec19bffdf5eced02616fea9c0b1abb2cb3ce56f0dffbad34b797f2a422090c193a14a52418b95b5803b3475559f1dc21a
   languageName: node
   linkType: hard
 
