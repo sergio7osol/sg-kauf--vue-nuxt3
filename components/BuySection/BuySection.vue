@@ -37,8 +37,6 @@ export default defineComponent({
 
 <style scoped lang="scss">
   .buy-list {
-    padding-top: 3.5rem;
-
     &__items {
       counter-reset: buy-counter;
       align-items: stretch;

@@ -9,7 +9,7 @@
       </svg>
     </div>
     <Sum />
-    <SumCalc /> <!-- :amount="calculatedSum" :currency="activeCurrency" @get-calc-sum="getCalcSum" @get-whole-sum="getWholeSum"  |:dateRange=""| -->
+    <SumCalc />
   </h4>
   <ul class="list-group list-group-flush buy-list__items">
     <li class="buy" v-for="buy in activeDate.buys" :key="buy.date">
@@ -46,7 +46,6 @@ export default defineComponent({
 @use '../../assets/styles/variables';
 
 .buy-list {
-  padding-top: 3.5rem;
   &__heading {
     display: flex;
     align-items: center;

@@ -1,9 +1,11 @@
 <template>
-  <div class="border-primary mb-3 sum-calc" style="max-width: 18rem;">
+  <div class="border-primary mb-3 sum-calc">
     <!-- <div class="card-header">{{ from }} - {{ to }}</div> -->
-    <div class="card-body text-info">
-      <h5 class="card-title sum-calc__title">{{ roundedSum }}</h5>
-      <span class="sum-calc__currency">{{ currency }}</span>
+    <div class="card-body text-info sum-calc__body">
+      <div class="sum-calc__price">
+        <h5 class="card-title sum-calc__title">
+          {{ roundedSum }}</h5>
+        <span class="sum-calc__currency">{{ currency }}</span></div>
       <div class="sum-calc__payment mt-2">
         <div class="sum-calc__cost-col">
           <span class="sum-calc__payment-name">Cost: </span>
@@ -14,8 +16,9 @@
           <span class="sum-calc__payment-value">{{ roundedDiscount }}</span>
         </div>
       </div>
-      <div class="card-body">
+      <div class="card-body sum-calc__controls">
         <div class="sum-calc__set-range">
+          <p>from - to</p>
           <datepicker
               v-model="from"
               inputFormat="dd.MM.yyyy"
@@ -32,8 +35,10 @@
               inputFormat="dd.MM.yyyy"
           />
         </div>
-        <button class="btn btn-success mt-4 sum-calc__submit" @click="getCalcSum">Calculate Sum</button>
-        <button class="btn btn-info mt-3 sum-calc__submit" @click="sendGetWholeSum">Get whole Sum</button>
+        <div class="sum-calc__buttons">
+          <button class="btn btn-success mt-4 sum-calc__submit" @click="getCalcSum">Calculate Sum</button>
+          <button class="btn btn-info mt-3 sum-calc__submit" @click="sendGetWholeSum">Get whole Sum</button>
+        </div>
       </div>
     </div>
   </div>
@@ -47,7 +52,6 @@ import {
 import Datepicker from 'vue3-datepicker';
 import { ShallowUnwrapRef } from "nuxt3/dist/app/compat/capi";
 import PriceInfo from "@/types/PriceInfo";
-import DateRange from "@/types/DateRange";
 import { Currency } from "@/types/StaticBuyInfoTypes";
 import SgKaufState from "@/types/SgKaufState";
 
@@ -56,10 +60,10 @@ export default defineComponent({
   components: { Datepicker },
   setup() {
     const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState>, methods: { getRangeSum: Function, getWholeSum: Function } };
-    const dateRange = reactive<DateRange>({
-      from: new Date(2021, 0, 15),
-      to: new Date()
-    });
+    // const dateRange = reactive<DateRange>({
+    // });
+    const from = ref<Date>(new Date(2021, 0, 15));
+    const to = ref<Date>(new Date());
     const currency: Currency = 'EUR'; // TODO: implement dynamic currency exchange / calculating different currencies separately
     const calculatedSum = ref<PriceInfo>({cost: 0, discount: 0});
     const roundedCost = computed(() => calculatedSum.value.cost ? calculatedSum.value.cost.toFixed(2) : 0);
@@ -77,10 +81,10 @@ export default defineComponent({
     };
 
     const getCalcSum = () => {
-      const from = getDateString(dateRange.from);
-      const to = getDateString(dateRange.to);
+      const fromValue = getDateString(from.value);
+      const toValue = getDateString(to.value);
 
-      const urlSuffix = `from=${from}&to=${to}`;
+      const urlSuffix = `from=${fromValue}&to=${toValue}`;
       store.methods.getRangeSum(urlSuffix)
           .then((data: PriceInfo) => {
             calculatedSum.value = data;
@@ -103,8 +107,8 @@ export default defineComponent({
     };
 
     return {
-      from: dateRange.from,
-      to: dateRange.to,
+      from,
+      to,
       currency,
       roundedCost,
       roundedDiscount,
@@ -124,8 +128,33 @@ export default defineComponent({
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1), 0px -4px 8px rgba(255, 255, 255, 0.8);
   border: 1px solid #efefef !important;
   margin-left: auto;
-  &__set-range input {
-    max-width: 100%;
+  &__body {
+    display: flex;
+    align-items: center;
+  }
+  &__price {
+    padding-right: 1.5rem;
+    border-right: 1px solid variables.$default-menu-separator-color;
+  }
+  &__payment {
+    padding-left: 1.5rem;
+  }
+  &__set-range {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    border-right: 1px solid variables.$default-menu-separator-color;
+    border-left: 1px solid variables.$default-menu-separator-color;
+    input {
+      max-width: 100%;
+    }
+  }
+  &__controls {
+    display: flex;
+  }
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    padding-left: 1.5rem;
   }
   &__title {
     display: inline-block;
