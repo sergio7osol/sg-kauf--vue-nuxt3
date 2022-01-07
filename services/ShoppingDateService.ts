@@ -1,4 +1,4 @@
-import axios, {AxiosResponse} from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import DetailedDateInfo from '@/types/DetailedDateInfo';
 import BuyInfo from '@/types/BuyInfo';
 import Product from '@/types/Product';
