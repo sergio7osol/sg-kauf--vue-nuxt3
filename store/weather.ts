@@ -5,21 +5,21 @@ import WeatherInfo from "@/types/WeatherInfo";
 import WeatherError from "@/types/WeatherError";
 
 const state = reactive<WeatherState>({
-    weatherData: {} as WeatherInfo
+    weatherData: [] as WeatherInfo[]
 });
 
 const methods = {
-    getWeatherForecast(address: string): void {
-        fetchWeatherForecast(address)
+    getWeatherForecast(address: string): Promise<WeatherInfo | WeatherError | void> {
+        return fetchWeatherForecast(address)
             .then((weatherData) => {
-                methods._setWeather(weatherData);
+                // methods._setWeather(weatherData);
+                return weatherData;
             })
             .catch(function(err) {
                 console.log('getWeatherForecast. ', 'Fetch Error :-S', err);
             });
     },
-    _setWeather(newWeatherData: WeatherInfo | WeatherError) {
-        console.log('newWeatherData >> ', newWeatherData);
+    _setWeather(newWeatherData: WeatherInfo[] | WeatherError) {
         if ('error' in newWeatherData) {
             return console.error('Weather data can not be set: ', newWeatherData.error);
         }

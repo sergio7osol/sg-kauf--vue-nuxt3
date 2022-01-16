@@ -3,7 +3,7 @@
     <h1 class="weather-header__title">Weather forecast</h1>
     <div class="weather-header__content">
       <div class="weather-header__body">{{ currentDate() }}</div>
-      <div class="weather-header__footer">{{ weatherInfo.observationTime }}</div>
+      <div class="weather-header__footer">{{ weatherInfo[0].observationTime }}</div>
     </div>
   </div>
   <div class="container weather-card__table-wrapper">
@@ -20,29 +20,30 @@
       </tr>
       </thead>
       <tbody class="weather-card__table-body">
-      <tr>
+      <tr v-for="weatherLocation in weatherInfo">
         <th scope="row" class="weather-card__table-col weather-card__table-col--f-weight-normal">
-          {{ weatherInfo.location }}
+          {{ weatherLocation.location }}
         </th>
         <td class="weather-card__table-col">
-          {{ weatherInfo.temperature }}
+          {{ weatherLocation.temperature }}
           <span class="weather-card__measure">°C</span>
         </td>
         <td class="weather-card__table-col">
-          {{ weatherInfo.feelslike }}
+          {{ weatherLocation.feelslike }}
           <span class="weather-card__measure">°C</span>
         </td>
         <td class="weather-card__table-col">
-          {{ weatherInfo.wind_speed }}
+          {{ weatherLocation.wind_speed }}
+          <span class="weather-card__measure">m/s</span>
         </td>
         <td class="weather-card__table-col">
-          {{ weatherInfo.humidity }}
+          {{ weatherLocation.humidity }}
         </td>
         <td class="weather-card__table-col">
-          {{ weatherInfo.precip }}
+          {{ weatherLocation.precip }}
         </td>
         <td class="weather-card__table-col">
-          {{ weatherInfo.description }}
+          {{ weatherLocation.description }}
         </td>
       </tr>
       </tbody>
@@ -75,9 +76,24 @@ export default defineComponent({
     // const getUserRepositories = async () => {
     //   repositories.value = await fetchUserRepositories(props.user)
     // }
-    const weatherInfo = computed<WeatherInfo>(() => weatherStore.state.weatherData);
+    const weatherInfo = computed<WeatherInfo[] | unknown>(() => weatherStore.state.weatherData);
 
-    onMounted(getWeatherForecast('Saransk') as any);
+    const getForecastForAllLocations = () => {
+      const hamburg = getWeatherForecast('Hamburg');
+      const saransk = getWeatherForecast('Saransk');
+      const danilov = getWeatherForecast('Danilov, Yaroslavl Oblast');
+      const gavrilovYam = getWeatherForecast('Gavrilov Yam');
+      const munich = getWeatherForecast('Munich');
+      const allLocations = [hamburg, saransk, danilov, gavrilovYam, munich];
+
+      Promise.all(allLocations).then((forecastResults) => {
+        weatherStore.methods._setWeather(forecastResults as WeatherInfo[]);
+      }).catch((error) => {
+        console.error(error);
+      });
+    };
+
+    onMounted(getForecastForAllLocations() as any);
 
     return {
       weatherInfo,
@@ -94,6 +110,9 @@ export default defineComponent({
   background: linear-gradient(to bottom,  #fdfefe 0%,#c8cbe2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 
+.container {
+  max-width: 80%;
+}
 .weather-header {
   margin-top: 2rem;
   &__title {
