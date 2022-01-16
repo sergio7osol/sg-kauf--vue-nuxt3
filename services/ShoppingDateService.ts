@@ -4,6 +4,8 @@ import BuyInfo from '@/types/BuyInfo';
 import Product from '@/types/Product';
 import ResponseInfo from '@/types/ResponseInfo';
 import PriceInfo from '@/types/PriceInfo';
+import WeatherInfo from "@/types/WeatherInfo";
+import WeatherError from "@/types/WeatherError";
 
 const apiClient = axios.create({
     baseURL: 'http://localhost:3030',
@@ -112,4 +114,14 @@ export function fetchWholeSum(): Promise<{ wholeSum: PriceInfo }> {
             }
             return response.data;
         })
+}
+export function fetchWeatherForecast(address: string): Promise<WeatherInfo | WeatherError> {
+    const encodedUrlAddress = encodeURIComponent(address);
+    return apiClient.get(`/get-weather?address=${encodedUrlAddress}`)
+        .then(response => {
+            if (response.status !== 200) {
+                throw Error('Looks like there was a problem. Status Code: ' + response.status);
+            }
+            return response.data;
+        });
 }
