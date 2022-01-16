@@ -8,3 +8,12 @@
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+  .main-content {
+    &__body {
+      background: url("/assets/images/road-bg.jpg") no-repeat center center transparent;
+      background-size: cover;
+    }
+  }
+</style>
