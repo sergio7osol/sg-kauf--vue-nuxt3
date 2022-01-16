@@ -1,15 +1,15 @@
 <template>
   <div class="main-content__left-menu">
-    <LeftMenu /> <!-- :selected-date='activeDate' @date-selected='getDate' :key='Date.now()'-->
+    <LeftMenu /> <!-- :selected-date='activeDate' @date-selected='getDate' :key='Date.now()' -->
   </div>
   <div class="main-content__body col">
-    <BuySection  /> <!--  :dateBuys="activeDateBuys" @save-product="saveProduct" @remove-product="removeProduct" -->
+    <BuySection  /> <!-- :dateBuys="activeDateBuys" @save-product="saveProduct" @remove-product="removeProduct" -->
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, provide } from 'vue';
-import store from '@/store/index';
+import store from '@/store/default';
 import BuySection from '@/components/BuySection/BuySection';
 import LeftMenu from '@/components/LeftMenu/LeftMenu';
 

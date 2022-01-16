@@ -16,30 +16,30 @@
           <li class="nav-item">
             <NuxtLink class="nav-link" :to="{ name: 'weather' }">Weather</NuxtLink>
           </li>
-<!--          <li class="nav-item">-->
-<!--            <NuxtLink class="nav-link" :to="{ name: 'weather-_month' }">Month</NuxtLink>-->
-<!--          </li>-->
-<!--          <li class="nav-item">-->
-<!--            <NuxtLink class="nav-link" :to="{ name: 'weather-_month', params: { month: 'January' } }">January</NuxtLink>-->
-<!--          </li>-->
-<!--          <li class="nav-item">-->
-<!--            <NuxtLink class="nav-link" :to="{ name: 'weather-_month', params: { month: 'February' } }">February</NuxtLink>-->
-<!--          </li>-->
-<!--          <li class="nav-item">-->
-<!--            <NuxtLink class="nav-link" :to="{ name: 'weather-_month', params: { month: 'March' } }">March</NuxtLink>-->
-<!--          </li>-->
-<!--          <li class="nav-item text-nowrap">-->
-<!--            <NuxtLink class="dropdown-item" :to="{ name: 'blog-posts-_id', params: { id: 1 } }">Post 1</NuxtLink>-->
-<!--          </li>-->
-<!--          <li class="nav-item text-nowrap"><a class="dropdown-item" href="#">Post 2</a></li>-->
-<!--          <li class="nav-item text-nowrap"><hr class="dropdown-divider"></li>-->
-<!--          <li class="nav-item text-nowrap"><a class="dropdown-item" href="#">Post 3</a></li>-->
-<!--          <li class="nav-item">-->
-<!--            <form class="d-flex">-->
-<!--              <input class="form-control form-control-dark w-100 me-2" placeholder="Search" aria-label="Search" type="text">-->
-<!--              <button class="btn btn-secondary" type="submit">Search</button>-->
-<!--            </form>-->
-<!--          </li>-->
+          <li class="nav-item">
+            <NuxtLink class="nav-link" :to="{ name: 'weather-_month' }">Month</NuxtLink>
+          </li>
+          <li class="nav-item">
+            <NuxtLink class="nav-link" :to="{ name: 'weather-_month', params: { month: 'January' } }">January</NuxtLink>
+          </li>
+          <li class="nav-item">
+            <NuxtLink class="nav-link" :to="{ name: 'weather-_month', params: { month: 'February' } }">February</NuxtLink>
+          </li>
+          <li class="nav-item">
+            <NuxtLink class="nav-link" :to="{ name: 'weather-_month', params: { month: 'March' } }">March</NuxtLink>
+          </li>
+          <li class="nav-item text-nowrap">
+            <NuxtLink class="dropdown-item" :to="{ name: 'blog-posts-_id', params: { id: 1 } }">Post 1</NuxtLink>
+          </li>
+          <li class="nav-item text-nowrap"><a class="dropdown-item" href="#">Post 2</a></li>
+          <li class="nav-item text-nowrap"><hr class="dropdown-divider"></li>
+          <li class="nav-item text-nowrap"><a class="dropdown-item" href="#">Post 3</a></li>
+          <li class="nav-item">
+            <form class="d-flex">
+              <input class="form-control form-control-dark w-100 me-2" placeholder="Search" aria-label="Search" type="text">
+              <button class="btn btn-secondary" @click="$router.push('/weather')" type="submit">Search</button>
+            </form>
+          </li>
         </ul>
       </div>
       <span class="nav-item text-nowrap">

@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.178",
-    "nuxt3": "3.0.0-27291847.07c7a20",
+    "nuxt3": "next",
     "sass": "^1.43.5",
     "sass-loader": "10"
   },
