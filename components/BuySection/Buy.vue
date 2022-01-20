@@ -25,8 +25,8 @@
     </tr>
     </thead>
     <tbody class="product">
-    <AddProductTableRow :date="buyData.date" :time="buyData.time" />
-    <tr v-for="(product, index) in buyData.products" class="buy-table__row buy-table__head-row--body">
+    <AddProductTableRow :date="buyData.date" :time="buyData.time" :key="Date.now()" />
+    <tr v-for="(product, index) in buyData.products" class="buy-table__row buy-table__head-row--body" :key="product.name + index">
       <th scope="row" class="buy-table__cell buy-table__head-cell--body">{{ index + 1 }}</th>
       <td class="buy-table__cell buy-table__head-cell--body">{{ product.name }}</td>
       <td class="buy-table__cell buy-table__head-cell--body">{{ product.price }}</td>

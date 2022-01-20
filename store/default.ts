@@ -179,7 +179,7 @@ const methods = {
                 console.log("getProductDefaults, Fetch Error :-S", err);
             });
     },
-    saveProduct(date: string, time: string, productInfo: Product) {
+    saveProduct(date: string, time: string, productInfo: Product, toDefault: boolean) {
         let { name, price, weightAmount, measure, description, discount } = productInfo;
 
         const dateToAddProductTo = state.shoppingDates.find(shoppingDate => shoppingDate.date === date);
@@ -207,6 +207,7 @@ const methods = {
         url += measure ? `&measure=${measure}` : '';
         url += description ? `&description=${description}` : '';
         url += discount ? `&discount=${discount}` : '';
+        url += toDefault ? `&todefault=${toDefault}` : '';
 
         return createProduct(url)
             .then((data: Product[]) => { // TODO: change to response with one added product

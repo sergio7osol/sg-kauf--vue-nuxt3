@@ -67,6 +67,10 @@
     </td>
     <td class="buy-table__cell buy-table__head-cell--body">
       <div class="product-info__buttons">
+        <div class="form-check form-switch">
+          <input id="addToDefaults" class="form-check-input" v-model="toDefault" role="switch" type="checkbox" />
+          <label class="form-check-label" for="addToDefaults">add to defaults</label>
+        </div>
         <button
             class="btn btn-success btn-sm product-info__btn-add text-nowrap"
             type="button"
@@ -81,10 +85,7 @@
 </template>
 
 <script lang="ts">
-import {
-  ref,
-  toRefs
-} from 'vue';
+import { ref } from 'vue';
 import useCollectionDefaults from '@/composables/useCollectionDefaults';
 import Product from '@/types/Product';
 import { ShallowUnwrapRef } from 'nuxt3/dist/app/compat/capi';
@@ -104,6 +105,7 @@ export default defineComponent({
       description: '',
       discount: 0
     });
+    const toDefault = ref<boolean>(false);
     const saveProductButton = ref<HTMLButtonElement | null>(null);
     const sendProductToSave = () => {
       const date = props.date;
@@ -113,7 +115,7 @@ export default defineComponent({
         return console.warn('Name, price, weight/amount are required attributes and should be provided for saving a product. Returning...');
       }
 
-      store.methods.saveProduct(date, time, {...newProduct})
+      store.methods.saveProduct(date, time, {...newProduct}, toDefault.value)
           .then((data: boolean) => {
             newProduct.name = '';
             newProduct.price = 0;
@@ -151,7 +153,8 @@ export default defineComponent({
       ValueCollection,
       productAutocomplete,
       saveProductButton,
-      sendProductToSave
+      sendProductToSave,
+      toDefault
     }
   },
   props: {
@@ -169,10 +172,13 @@ export default defineComponent({
 
 <style scoped lang="scss">
 @use '../../assets/styles/variables';
-
+.buy-table {
+  &__cell {
+    vertical-align: middle;
+  }
+}
 .product {
   padding-left: 2rem;
-
   &--default {
     margin-left: 2rem;
 
@@ -180,19 +186,23 @@ export default defineComponent({
       content: none;
     }
   }
-
   &__products {
     align-items: flex-start;
     margin-top: 1rem;
     font-size: .95rem;
     color: #565;
   }
-
   &__badge {
     color: #fff;
     position: absolute;
     top: 18px;
     right: 12px;
+  }
+  .form-control {
+    line-height: 1;
+    height: 3rem;
+    font-size: 1.2rem;
+    border-radius: 0.4rem;
   }
 }
 .product-info {
@@ -221,8 +231,8 @@ export default defineComponent({
   }
 
   &__buttons {
-    // width: 10rem;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
   }
@@ -235,12 +245,6 @@ export default defineComponent({
     vertical-align: middle;
   }
 }
-
-.product .form-control {
-  height: 2rem;
-  line-height: 1;
-}
-
 .btn {
   &--icon {
     &-remove {
@@ -258,6 +262,27 @@ export default defineComponent({
       &::before {
         content: "\2718";
       }
+    }
+  }
+}
+.form-switch {
+  display: flex;
+  align-items: center;
+  line-height: 1;
+  margin-bottom: .5rem;
+  min-height: 1.2rem;
+  &:hover {
+    cursor: pointer;
+  }
+  .form-check-input {
+    margin-top: 0;
+  }
+  .form-check-label {
+    margin-left: .4rem;
+    font-size: .75rem;
+    //color: #bfbfbf;
+    .form-check-input:checked + & {
+      color: #0d6efd;
     }
   }
 }
