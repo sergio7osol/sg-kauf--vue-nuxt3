@@ -101,10 +101,10 @@ export default defineComponent({
     const StaticValueCollection = { // TODO: move to server
       countries: ['Germany', 'Russia', 'online'],
       shopNames: ['REWE', 'ALDI', 'Kaufland', 'Lidl', 'PENNY', 'Amazon.de', 'Netflix.com', 'Edeka', 'IKEA', 'ROHLFS BÄCKEREI KONDITOREI GmbH', 'Apotheke a.d. Friedenseiche Nikolaus Wendel', 'About you', 'Netflix', 'Innovativelanguage.com', 'Mango', 'OVB', 'Vodavone GmbH', 'Telekom Deutschland GmbH', 'Ernst Scholz', 'Sparkasse', 'Apotheke in der Marktplatz Galerie', 'easyApotheke'],
-      indexes: ['22307', '22529', '22299', '20251', '22761', '22301', '20249', '22525', '22041', '22177', '22179', '22457', 'online', ''],
+      indexes: ['22307', '22529', '22299', '20251', '22761', '22301', '20249', '22459', '22525', '22041', '22177', '22179', '22457', 'online', ''],
       cities: ['Hamburg', 'Moscow', 'Saransk', 'online', ''],
-      streets: ['Fuhlsbuettler Str.', 'Troplowitzstrasse', 'Osterfeldestrasse', 'Wunderbrunnen', 'Winterhuder Marktplatz', 'Eppendorfer Marktplatz', 'Stresemannstrasse', 'Nedderfeld', 'Dorotheenstrasse', 'Kümmellstraße', 'Kieler Straße', 'Grelckstraße', 'Walddörferstraße', 'Eppendorfer Baum', 'Bramfelder Chaussee', 'Bramfelder Dorfplatz', 'online', ''],
-      houseNumbers: ['387', '8', '7', '13-15', '2', '1', '39', '34',  '35', '300', '70', '116-122', '4-8', '30-40', '595', '579', '146', '230', '18', 'online', ''],
+      streets: ['Fuhlsbuettler Str.', 'Troplowitzstrasse', 'Osterfeldestrasse', 'Wunderbrunnen', 'Winterhuder Marktplatz', 'Eppendorfer Marktplatz', 'Stresemannstrasse', 'Nedderfeld', 'Dorotheenstrasse', 'Kümmellstraße', 'Kieler Straße', 'Grelckstraße', 'Walddörferstraße', 'Eppendorfer Baum', 'Bramfelder Chaussee', 'Bramfelder Dorfplatz', 'Tibarg', 'online', ''],
+      houseNumbers: ['1', '2', '4-8', '7', '8', '18', '13-15', '30-40', '32', '34', '35', '39', '70', '116-122', '146', '230', '300', '595', '387', '579', 'online', ''],
       currencies: ['EUR', 'RUB'],
       payMethods: ['EC card', 'Cash', 'N26 card', 'PayPal', 'Amazon VISA']
     };

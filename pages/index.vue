@@ -55,6 +55,8 @@ export default defineComponent({
     flex-grow: 1;
     padding: .5rem 1rem;
     overflow: auto;
+    background: url(~~/assets/images/dotted-bg.webp) no-repeat top left transparent;
+    background-size: cover;
     &:before {
       content: "";
       position: absolute;
