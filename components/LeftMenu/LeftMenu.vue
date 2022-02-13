@@ -1,6 +1,42 @@
+<script setup lang="ts">
+  import SortBox from '@/components/LeftMenu/SortBox';
+  import useShoppingDates from '@/composables/useShoppingDates';
+  import useSortShoppingDates from '@/composables/useSortShoppingDates';
+  import useActiveDateBuys from '@/composables/useActiveDateBuys';
+  // import getMonthString from "@/utils/getMonthString";
+  import DetailedDateInfo from "@/types/DetailedDateInfo";
+
+  const { shoppingDates } = useShoppingDates();
+  const { sortOrder, sortedShoppingDates, changeSortOrder } = useSortShoppingDates(shoppingDates);
+  const { activeDate, setActiveDate, loadingDate, setLoadingDate } = useActiveDateBuys();
+  const chooseDate = (date: string) => {
+    setLoadingDate(date);
+    setActiveDate(date);
+  }
+  const countProducts = (date: DetailedDateInfo): number => {
+    if (date.count) {
+      return date.count;
+    }
+    let productQuantity: number | undefined = date?.buys?.reduce((quantity, buy) => {
+      if (buy.products && buy.products.length) {
+        quantity += buy.products.length;
+      }
+      return quantity;
+    }, 0);
+    productQuantity = productQuantity === undefined ? 0 : productQuantity;
+    return productQuantity;
+  };
+</script>
+
+<script lang="ts">
+export default defineComponent({
+  name: 'LeftMenu',
+  components: { SortBox }
+})
+</script>
+
 <template>
-  <nav id="sidebarMenu" class="d-md-block sidebar collapse vertical-menu">
-    <div class="pt-3 pb-3">
+  <nav id="sidebarMenu" class="d-md-block sidebar collapse vertical-menu pt-3 pb-3">
       <SortBox :active-sort-order="sortOrder" @sort-order="changeSortOrder($event)" />
       <ul class="nav flex-column vertical-menu__list">
         <li class="nav-item vertical-menu__item" v-for="item in sortedShoppingDates" :key="item.date">
@@ -22,68 +58,8 @@
           </a>
         </li>
       </ul>
-    </div>
   </nav>
 </template>
-
-<script lang="ts">
-import {
-  defineComponent,
-} from 'vue';
-import SortBox from '@/components/LeftMenu/SortBox';
-import useShoppingDates from '@/composables/useShoppingDates';
-import useSortShoppingDates from '@/composables/useSortShoppingDates';
-import useActiveDateBuys from '@/composables/useActiveDateBuys';
-import DetailedDateInfo from "@/types/DetailedDateInfo";
-
-export default defineComponent({
-  name: 'LeftMenu',
-  components: { SortBox },
-  setup() {
-    const { shoppingDates } = useShoppingDates();
-    const { sortOrder, sortedShoppingDates, changeSortOrder } = useSortShoppingDates(shoppingDates);
-    const { activeDate, setActiveDate, loadingDate, setLoadingDate } = useActiveDateBuys();
-    const chooseDate = (date: string) => {
-      setLoadingDate(date);
-      setActiveDate(date);
-    }
-    const countProducts = (date: DetailedDateInfo): number => {
-      if (date.count) {
-        return date.count;
-      }
-      let productQuantity: number | undefined = date?.buys?.reduce((quantity, buy) => {
-        if (buy.products && buy.products.length) {
-          quantity += buy.products.length;
-        }
-        return quantity;
-      }, 0);
-      productQuantity = productQuantity === undefined ? 0 : productQuantity;
-      return productQuantity;
-    };
-
-    return {
-      sortedShoppingDates,
-      sortOrder,
-      changeSortOrder,
-      loadingDate,
-      chooseDate,
-      activeDate,
-      setActiveDate,
-      countProducts
-    };
-  },
-  // props: {},
-  // emits: {},
-  // methods: {
-  //   getMonthString(monthNumber: number) {
-  //     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  //     monthNumber = Number(monthNumber) - 1;
-  //
-  //     return monthNames[monthNumber];
-  //   }
-  // }
-});
-</script>
 
 <style scoped lang="scss">
 @use '../../assets/styles/variables' as *;
