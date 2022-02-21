@@ -5,6 +5,7 @@
       <input
           class="form-control product-info__name"
           v-model="newProduct.name"
+          ref="productNameTextField"
           @input="productAutocomplete"
           list="product-names"
           type="text"
@@ -88,7 +89,7 @@
 import { ref } from 'vue';
 import useCollectionDefaults from '@/composables/useCollectionDefaults';
 import Product from '@/types/Product';
-import { ShallowUnwrapRef } from 'nuxt3/dist/app/compat/capi';
+import { Ref, ShallowUnwrapRef } from 'nuxt3/dist/app/compat/capi';
 import SgKaufState from '@/types/SgKaufState';
 
 export default defineComponent({
@@ -106,14 +107,16 @@ export default defineComponent({
       discount: 0
     });
     const toDefault = ref<boolean>(false);
-    const saveProductButton = ref<HTMLButtonElement | null>(null);
+    const productNameTextField = ref<HTMLElement | null>(null);
+    const saveProductButton = ref<HTMLElement | null>(null);
     const sendProductToSave = () => {
-      const date = props.date;
-      const time = props.time;
+      const { date, time } = props;
       const { name, price, weightAmount, measure, description, discount } = newProduct;
       if (!name || !price || !weightAmount || !measure) {
         return console.warn('Name, price, weight/amount are required attributes and should be provided for saving a product. Returning...');
       }
+
+      focusRefElement(productNameTextField);
 
       store.methods.saveProduct(date, time, {...newProduct}, toDefault.value)
           .then((data: boolean) => {
@@ -124,10 +127,10 @@ export default defineComponent({
             newProduct.description = '';
             newProduct.discount = 0;
           });
-    }
-    const focusSaveProductButton = () => {
-      saveProductButton?.value?.focus();
-    }
+    };
+    const focusRefElement = (refElement: Ref<HTMLElement | null>) => {
+      refElement.value?.focus();
+    };
     const productAutocomplete = (event: Event) => {
       const foundDefault = findDefaultValue(event);
       if (typeof foundDefault === 'object') {
@@ -137,7 +140,7 @@ export default defineComponent({
         newProduct.measure = foundDefault.measure || 'piece';
         newProduct.description = foundDefault.description || '';
         newProduct.discount = foundDefault.discount || 0;
-        focusSaveProductButton();
+        focusRefElement(saveProductButton);
       } else {
         newProduct.name = foundDefault;
         newProduct.price = 0;
@@ -147,15 +150,20 @@ export default defineComponent({
         newProduct.discount = 0;
       }
     };
-
+    onMounted(() => {
+      focusRefElement(productNameTextField);
+    })
+ 
     return {
       newProduct,
       ValueCollection,
       productAutocomplete,
+      productNameTextField,
       saveProductButton,
+      focusRefElement,
       sendProductToSave,
       toDefault
-    }
+    } 
   },
   props: {
     date: {

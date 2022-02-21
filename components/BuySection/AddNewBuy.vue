@@ -100,11 +100,11 @@ export default defineComponent({
     })
     const StaticValueCollection = { // TODO: move to server
       countries: ['Germany', 'Russia', 'online'],
-      shopNames: ['REWE', 'ALDI', 'Kaufland', 'Lidl', 'PENNY', 'Amazon.de', 'Netflix.com', 'Edeka', 'IKEA', 'ROHLFS BÄCKEREI KONDITOREI GmbH', 'Apotheke a.d. Friedenseiche Nikolaus Wendel', 'About you', 'Netflix', 'Innovativelanguage.com', 'Mango', 'OVB', 'Vodavone GmbH', 'Telekom Deutschland GmbH', 'Ernst Scholz', 'Sparkasse', 'Apotheke in der Marktplatz Galerie', 'easyApotheke'],
+      shopNames: ['REWE', 'ALDI', 'Kaufland', 'Lidl', 'PENNY', 'Amazon.de', 'Netflix.com', 'Edeka', 'IKEA', 'BAUHAUS', 'OBI', 'ROHLFS BÄCKEREI KONDITOREI GmbH', 'Apotheke a.d. Friedenseiche Nikolaus Wendel', 'About you', 'Netflix', 'Innovativelanguage.com', 'Mango', 'OVB', 'Vodavone GmbH', 'Telekom Deutschland GmbH', 'Ernst Scholz', 'Sparkasse', 'Apotheke in der Marktplatz Galerie', 'easyApotheke'],
       indexes: ['22307', '22529', '22299', '20251', '22761', '22301', '20249', '22459', '22525', '22041', '22177', '22179', '22457', 'online', ''],
       cities: ['Hamburg', 'Moscow', 'Saransk', 'online', ''],
-      streets: ['Fuhlsbuettler Str.', 'Troplowitzstrasse', 'Osterfeldestrasse', 'Wunderbrunnen', 'Winterhuder Marktplatz', 'Eppendorfer Marktplatz', 'Stresemannstrasse', 'Nedderfeld', 'Dorotheenstrasse', 'Kümmellstraße', 'Kieler Straße', 'Grelckstraße', 'Walddörferstraße', 'Eppendorfer Baum', 'Bramfelder Chaussee', 'Bramfelder Dorfplatz', 'Tibarg', 'online', ''],
-      houseNumbers: ['1', '2', '4-8', '7', '8', '18', '13-15', '30-40', '32', '34', '35', '39', '70', '116-122', '146', '230', '300', '595', '387', '579', 'online', ''],
+      streets: ['Alte Kollaustraße', 'Fuhlsbuettler Str.', 'Troplowitzstrasse', 'Osterfeldestrasse', 'Wunderbrunnen', 'Winterhuder Marktplatz', 'Eppendorfer Marktplatz', 'Stresemannstrasse', 'Nedderfeld', 'Dorotheenstrasse', 'Kümmellstraße', 'Kieler Straße', 'Grelckstraße', 'Walddörferstraße', 'Eppendorfer Baum', 'Bramfelder Chaussee', 'Bramfelder Dorfplatz', 'Tibarg', 'online', ''],
+      houseNumbers: ['1', '2', '4-8', '7', '8', '18', '13-15', '30-40', '32', '34', '35', '39', '44/46', '70', '100', '116-122', '146', '230', '300', '595', '387', '579', 'online', ''],
       currencies: ['EUR', 'RUB'],
       payMethods: ['EC card', 'Cash', 'N26 card', 'PayPal', 'Amazon VISA']
     };
