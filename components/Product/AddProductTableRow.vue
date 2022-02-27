@@ -14,7 +14,7 @@
         <option
             v-for="(nameValue, index) in ValueCollection.defaults"
             :value="nameValue.name || nameValue"
-            :key="(nameValue.name || nameValue) + index"
+            :key="(nameValue.name || nameValue) + index" 
         />
       </datalist>
     </td>
@@ -54,8 +54,16 @@
           class="form-control product-info__description"
           v-model.trim="newProduct.description"
           placeholder="Description"
+          list="product-descriptions"
           type="text"
       />
+      <datalist id="product-descriptions">
+        <option
+            v-for="(description, index) in ValueCollection.descriptions"
+            :value="description"
+            :key="description + index"
+        />
+      </datalist>
     </td>
     <td class="buy-table__cell buy-table__head-cell--body">
       <input

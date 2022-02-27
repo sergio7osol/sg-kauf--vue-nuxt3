@@ -70,6 +70,15 @@ export function getProductNames(): Promise<string[]> {
             return response.data;
         });
 }
+export function getProductDescriptions(): Promise<string[]> {
+    return apiClient.get('/get-product-descriptions')
+        .then(response => {
+            if (response.status !== 200) {
+                throw Error('Looks like there was a problem. Status Code: ' + response.status);
+            }
+            return response.data;
+        });
+}
 export function getProductDefaults(): Promise<Array<string | Product>> {
     return apiClient.get('/get-product-defaults')
         .then(response => {

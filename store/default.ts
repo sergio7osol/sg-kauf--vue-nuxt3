@@ -6,6 +6,7 @@ import {
     deleteBuy,
     readDate,
     getProductNames,
+    getProductDescriptions,
     getProductDefaults,
     createProduct,
     removeProduct,
@@ -26,7 +27,8 @@ const state = reactive<SgKaufState>({
     activeDate: {} as DetailedDateInfo,
     loadingDate: '', // TODO: make dependent of activeDate
     ValueCollection: {
-        names: [],
+        names: [], 
+        descriptions: [],
         defaults: [],
         measures: ["piece", "kg"]
     }
@@ -44,7 +46,7 @@ const methods = {
             return false;
         }
         if (dateToSelect.buys) {
-            state.activeDate = dateToSelect;
+            state.activeDate = { ...dateToSelect };
             methods.setLoadingDate('');
         } else {
             readDate(newDate)
@@ -166,6 +168,19 @@ const methods = {
                 console.log('Fetch Error :-S', err);
             });
     },
+    fetchProductDescriptions() {
+        getProductDescriptions()
+            .then((productDescriptions: string[]) => {
+                if (!productDescriptions || !productDescriptions.length) {
+                    console.error("Product descriptions should be an Array of Strings. Got no descriptions. Returning...");
+                    return false;
+                }
+                methods._setCollectionOfProductDescriptions(productDescriptions);
+            })
+            .catch(function (err) {
+                console.log('Fetch Error :-S', err);
+            });
+    },
     fetchProductDefaults() {
         getProductDefaults()
             .then((productDefaults: Array<string | Product>) => {
@@ -210,7 +225,7 @@ const methods = {
         url += toDefault ? `&todefault=${toDefault}` : '';
 
         return createProduct(url)
-            .then((data: Product[]) => { // TODO: change to response with one added product
+            .then((data: Product[]) => { // TODO: change to response to one added product
                 buyToAddProductTo.products = data;
                 // react to changed products if same date is active
                 // thisApp.displayNewProductState(thisApp.activeDateBuys, buyToAddProductTo, dateToAddProductTo, 'add');
@@ -312,6 +327,9 @@ const methods = {
     },
     _setCollectionProductNames(names: string[]) {
         state.ValueCollection.names = names;
+    },
+    _setCollectionOfProductDescriptions(descriptions: string[]) {
+        state.ValueCollection.descriptions = descriptions;
     },
     _setCollectionProductDefaults(defaults: (string | Product)[]) {
         state.ValueCollection.defaults = defaults as [];
