@@ -1,8 +1,11 @@
-import { defineNuxtConfig } from 'nuxt3';
+import { defineNuxtConfig } from 'nuxt';
 
 export default defineNuxtConfig({
     css: [
         '@/node_modules/bootstrap/scss/bootstrap.scss',
+        'primevue/resources/themes/saga-blue/theme.css',
+        'primevue/resources/primevue.css',
+        'primeicons/primeicons.css',
         '@/assets/styles/main.scss'
     ],
     typescript: {
