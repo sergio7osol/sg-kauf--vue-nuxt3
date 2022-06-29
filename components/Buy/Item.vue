@@ -1,3 +1,25 @@
+
+<script setup lang="ts">
+  import { ShallowUnwrapRef } from 'vue';
+  import SgKaufState from '@/types/SgKaufState';
+  import BuyInfo from '@/types/BuyInfo';
+  import Product from '@/types/Product';
+
+  defineProps<{ 
+    buyData: BuyInfo
+  }>();
+
+  const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState>, methods: { removeBuy: Function, removeProduct: Function } }; // TODO: set correct type
+  const remove = (buy: BuyInfo) => store.methods.removeBuy(buy);
+  const sendProductToRemove = (date: string, time: string, productInfoForRemove: Product) => {
+    store.methods.removeProduct(date, time, productInfoForRemove);
+  };
+
+  const graph = () => {
+    console.log('GRAPH.');
+  };
+</script>
+ 
 <template>
   <table class="table table-striped product-list__items buy-table">
     <caption class="buy-table__caption">
@@ -25,7 +47,7 @@
     </tr>
     </thead>
     <tbody class="product">
-    <AddProductTableRow :date="buyData.date" :time="buyData.time" :key="Date.now()" />
+    <ProductAddNewItemTableRow :date="buyData.date" :time="buyData.time" :key="Date.now()" />
     <tr v-for="(product, index) in buyData.products" class="buy-table__row buy-table__head-row--body" :key="product.name + index">
       <th scope="row" class="buy-table__cell buy-table__head-cell--body">{{ index + 1 }}</th>
       <td class="buy-table__cell buy-table__head-cell--body">{{ product.name }}</td>
@@ -39,51 +61,25 @@
           class="btn btn--icon-remove"
           @click.prevent="sendProductToRemove(buyData.date, buyData.time, product)"
         ></button>
+        <Button @click="graph()" icon="pi pi-chart-line" class="p-button-rounded p-button-text" />
       </td>
     </tr>
     </tbody>
   </table>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
-import AddProductTableRow from "@/components/Product/AddProductTableRow";
-import { ShallowUnwrapRef } from 'nuxt3/dist/app/compat/capi';
-import SgKaufState from '@/types/SgKaufState';
-import BuyInfo from '@/types/BuyInfo';
-import Product from '@/types/Product';
+<style scoped lang="scss">
+@use 'assets/styles/variables';
 
-export default defineComponent({
-  name: 'Buy',
-  components: { AddProductTableRow },
-  setup() {
-    const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState>, methods: { removeBuy: Function, removeProduct: Function } }; // TODO: set correct type
-    const remove = (buy: BuyInfo) => store.methods.removeBuy(buy);
-    const sendProductToRemove = (date: string, time: string, productInfoForRemove: Product) => {
-      store.methods.removeProduct(date, time, productInfoForRemove);
-    }
-
-    return {
-      remove,
-      sendProductToRemove
-    }
-  },
-  props: {
-    buyData: {
-      type: Object as PropType<BuyInfo>,
-    }
-  }
-})
-</script>
-
-<style lang="scss">
 .buy-table {
+  background-color: variables.$default-table-bg-color;
   &__caption {
     caption-side: top;
   }
   &__cell {
     &--actions {
-      text-align: center;
+      display: flex;
+      justify-content: center;
     }
   }
 }
