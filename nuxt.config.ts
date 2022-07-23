@@ -10,7 +10,13 @@ export default defineNuxtConfig({
     ],
     typescript: {
         shim: false
-    }
+    },
+    modules: [
+        // Simple usage
+        'nuxt-highcharts',
+        // With options: -> ['nuxt-highcharts', { /* module options */ }]
+      ],
+      highcharts: { /* module options */ }
     // link: [ 
     //     // <link rel="stylesheet" href="https://myawesome-lib.css">
     //     { rel: 'stylesheet', href: 'https://awesome-lib.css' }

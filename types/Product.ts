@@ -5,6 +5,10 @@ export default interface Product {
     price: number,
     weightAmount: number,
     measure: Measure,
-    description: string,
-    discount: number | string
+    description?: string,
+    discount?: number | string
+}
+
+export interface ProductWithDate extends Product {
+    date: string
 }

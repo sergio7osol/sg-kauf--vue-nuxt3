@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, ShallowUnwrapRef } from 'vue';
+  import { ShallowUnwrapRef } from 'vue';
   import SgKaufState from '@/types/SgKaufState';
   import BuyInfo from '@/types/BuyInfo';
 
@@ -106,9 +106,6 @@
               </div>
             </div>
           </div>
-          <!--    <div class="row" v-show="!isDefault">-->
-          <!--        <product-list :buyProducts="localProducts" @save-product="$attrs.onSaveProduct" @remove-product="$attrs.onRemoveProduct" />-->
-          <!--    </div>-->
         </form>
       </div>
     </div>
@@ -116,139 +113,132 @@
 </template>
 
 <style scoped lang="scss">
-@use '../../assets/styles/variables';
-.buy {
-  counter-increment: buy-counter;
-
-  &--default {
-    .buy-info::before {
-      content: none;
+  @use '../../assets/styles/variables';
+  .buy {
+    counter-increment: buy-counter;
+    &--default {
+      .buy-info::before {
+        content: none;
+      }
+    }
+    &__products {
+      align-items: flex-start;
+      margin-top: 1rem;
+      font-size: .95rem;
+      color: #565;
+    }
+    &__badge {
+      color: #fff;
+      position: absolute;
+      top: 18px;
+      right: 12px;
     }
   }
-
-  &__products {
-    align-items: flex-start;
-    margin-top: 1rem;
-    font-size: .95rem;
-    color: #565;
-  }
-
-  &__badge {
-    color: #fff;
-    position: absolute;
-    top: 18px;
-    right: 12px;
-  }
-}
-.buy-list__card {
-  &--default {
-    background-color: #efefef;
-    margin-bottom: 2rem;
-
-    .card {
-      &-header {
-        text-align: left;
-        font-weight: bold;
-        color: #777;
-      }
-      &-body {
-        padding: .8rem 0;
+  .buy-list__card {
+    &--default {
+      background-color: #efefef;
+      margin-bottom: 2rem;
+      .card {
+        &-header {
+          text-align: left;
+          font-weight: bold;
+          color: #777;
+        }
+        &-body {
+          padding: .8rem 0;
+        }
       }
     }
   }
-}
-/********************/
-.buy-info {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &::before {
-    content: counter(buy-counter) '.';
-    margin-right: 1rem;
-    font-size: 1.3rem;
-    color: #ccc;
-  }
-
-  &__date-and-time {
-    display: flex;
-    margin-right: 1.5rem;
-  }
-  &__date {
-    //width: 10.5rem;
-    width: auto;
-  }
-  &__time {
-    width: 8.3rem;
-  }
-  &__address {
+  /********************/
+  .buy-info {
     display: flex;
     align-items: center;
-  }
-  &__country {
-    //width: 9rem;
-    width: auto;
-  }
-  &__shop-name {
-    margin-right: 1.5rem;
-    width: auto;
-    max-width: 7rem;
-  }
-  &__city {
-    width: 8rem;
-  }
-  &__index {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    //width: 6rem;
-    width: auto;
-  }
-  &__street {
-    white-space: nowrap;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    width: 11rem;
-  }
-  &__houseNumber {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    width: 6rem;
-    margin-right: 1.5rem;
-  }
-  &__currency {
-    width: auto;
-  }
-  &__pay-method {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    width: 7.3rem;
-    display: flex;
-    margin-right: 1.5rem;
+    justify-content: center;
+    &::before {
+      content: counter(buy-counter) '.';
+      margin-right: 1rem;
+      font-size: 1.3rem;
+      color: #ccc;
+    }
+    &__date-and-time {
+      display: flex;
+      margin-right: 1.5rem;
+    }
+    &__date {
+      //width: 10.5rem;
+      width: auto;
+    }
+    &__time {
+      // width: 9rem;
+      width: 8.3rem;
+    }
+    &__address {
+      display: flex;
+      align-items: center;
+    }
+    &__country {
+      //width: 9rem;
+      width: auto;
+    }
+    &__shop-name {
+      margin-right: 1.5rem;
+      width: auto;
+      max-width: 7rem;
+    }
+    &__city {
+      width: 8rem;
+    }
+    &__index {
+      padding-left: 1rem;
+      padding-right: 1rem;
+      //width: 6rem;
+      width: auto;
+    }
+    &__street {
+      white-space: nowrap;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      width: 11rem;
+    }
+    &__houseNumber {
+      padding-left: 1rem;
+      padding-right: 1rem;
+      width: 6rem;
+      margin-right: 1.5rem;
+    }
+    &__currency {
+      width: auto;
+    }
+    &__pay-method {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      width: 7.3rem;
+      display: flex;
+      margin-right: 1.5rem;
 
-    &-check {
-      padding-left: 0;
-      margin-right: 0.5rem;
+      &-check {
+        padding-left: 0;
+        margin-right: 0.5rem;
 
-      &:last-child {
-        margin-right: 0;
+        &:last-child {
+          margin-right: 0;
+        }
       }
     }
+    &__buttons {
+      width: 10rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+    &__btn-add { 
+      margin-left: .4rem;
+      background-color: variables.$default-select-button-bg;
+    }
   }
-
-  &__buttons {
-    width: 10rem;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+  .buy--default .buy-info::before { content: none; }
+  .card {
+    background-color: #ddd !important;
   }
-  &__btn-add {
-    margin-left: .4rem;
-    background-color: variables.$default-select-button-bg;
-  }
-}
-
-.buy--default .buy-info::before { content: none; }
-.card {
-  background-color: #ddd !important;
-}
 </style>

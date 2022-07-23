@@ -1,11 +1,12 @@
 import axios, { AxiosResponse } from 'axios';
-import DetailedDateInfo from '@/types/DetailedDateInfo';
-import BuyInfo from '@/types/BuyInfo';
-import Product from '@/types/Product';
-import ResponseInfo from '@/types/ResponseInfo';
-import PriceInfo from '@/types/PriceInfo';
-import WeatherInfo from "@/types/WeatherInfo";
-import WeatherError from "@/types/WeatherError";
+import type DetailedDateInfo from '~~/types/DetailedDateInfo';
+import type BuyInfo from '~~/types/BuyInfo';
+import type Product from '~~/types/Product';
+import type ResponseInfo from '~~/types/ResponseInfo';
+import type PriceInfo from '~~/types/PriceInfo';
+import type WeatherInfo from "~~/types/WeatherInfo";
+import type WeatherError from "~~/types/WeatherError";
+import type { ProductWithDate } from '~~/types/Product';
 
 const apiClient = axios.create({
     baseURL: 'http://localhost:3030',
@@ -105,6 +106,15 @@ export function removeProduct(dataSuffix: string): Promise<ResponseInfo> {
             }
             return response.data;
         })
+}
+export function getProductTimelineData(dataSuffix: string): Promise<ProductWithDate[]> {
+    return apiClient.get(`/product-timeline?${dataSuffix}`)
+        .then(response => {
+            if (response.status !== 200) {
+                throw Error('Looks like there was a problem. Status Code: ' + response.status);
+            }
+            return response.data;
+        }) 
 }
 export function fetchRangeSum(dataSuffix: string): Promise<number> {
     return apiClient.get(`/get-calc-sum?${dataSuffix}`)

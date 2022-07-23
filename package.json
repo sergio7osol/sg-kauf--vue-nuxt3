@@ -15,6 +15,7 @@
     "axios": "^0.26.1",
     "bootstrap": "^5.1.3",
     "lodash": "^4.17.21",
+    "nuxt-highcharts": "next",
     "primeflex": "^3.2.1",
     "primeicons": "^5.0.0",
     "primevue": "3.15.0",

@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
   import { ShallowUnwrapRef } from 'vue';
-  import SgKaufState from '@/types/SgKaufState';
+  import SgKaufState from '~~/types/SgKaufState';
   import type BuyInfo from '~~/types/BuyInfo';
 
   defineProps<{ 
@@ -44,6 +44,7 @@
       class="buy-table__row buy-table__head-row--body" 
       :date="buyData.date"
       :time="buyData.time"
+      :shopName="buyData.shopName"
       :product="product" 
       :index="index" 
       :key="product.name + index" 

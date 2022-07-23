@@ -8,7 +8,6 @@
 <style lang="scss">
   .buy-section { 
     &__list {
-      
       counter-reset: buy-counter;
       align-items: stretch;
       list-style-type: none;

@@ -10,24 +10,26 @@ import {
     getProductDefaults,
     createProduct,
     removeProduct,
+    getProductTimelineData,
     fetchRangeSum,
     fetchWholeSum,
     fetchWeatherForecast
 } from '@/services/ShoppingDateService';
-import SgKaufState from '@/types/SgKaufState';
-import DetailedDateInfo from "@/types/DetailedDateInfo";
-import BuyInfo from "@/types/BuyInfo";
-import ResponseInfo from "@/types/ResponseInfo";
-import Product from "@/types/Product";
-import PriceInfo from "@/types/PriceInfo";
-import {string} from "postcss-selector-parser";
+import type SgKaufState from '@/types/SgKaufState';
+import type DetailedDateInfo from "@/types/DetailedDateInfo";
+import type BuyInfo from "@/types/BuyInfo";
+import type ResponseInfo from "@/types/ResponseInfo";
+import type Product from "@/types/Product";
+import type PriceInfo from "@/types/PriceInfo";
+import type { ProductTimelineRequestInfo } from '@/types/ProductTimelineInfo';
+import type { ProductWithDate } from '@/types/Product';
 
-const state = reactive<SgKaufState>({
-    shoppingDates: [] as DetailedDateInfo[],
+const state: SgKaufState = reactive({
+    shoppingDates: [],
     activeDate: {} as DetailedDateInfo,
     loadingDate: '', // TODO: make dependent of activeDate
     ValueCollection: {
-        names: [], 
+        names: [],
         descriptions: [],
         defaults: [],
         measures: ["piece", "kg"]
@@ -38,7 +40,7 @@ const methods = {
     setShoppingDates (newShoppingDates: DetailedDateInfo[]) {
         state.shoppingDates = newShoppingDates;
     },
-    setActiveDate (newDate: string) {
+    setActiveDate (newDate: string): boolean {
         const dateToSelect = state.shoppingDates.find(item => item.date === newDate);
         if (!dateToSelect) {
             console.warn(`Chosen date ${newDate} for loading buys was not found. No date is selected.`)
@@ -48,6 +50,7 @@ const methods = {
         if (dateToSelect.buys) {
             state.activeDate = { ...dateToSelect };
             methods.setLoadingDate('');
+            return true;
         } else {
             readDate(newDate)
                 .then((data: BuyInfo[]) => {
@@ -59,6 +62,7 @@ const methods = {
                     }
                 })
                 .catch(err => console.log('Fetch Error :-S', err));
+                return true;
         }
     },
     setLoadingDate (newDate: string) {
@@ -94,9 +98,7 @@ const methods = {
                     console.log('Saving buy. Success: ', data.success, ' Status: ', data.message);
                     methods._addBuy(buy, existingShoppingDate, existingBuy);
                     methods.setActiveDate(buy.date);
-                    return new Promise(resolve => {
-                        resolve(true);
-                    });
+                    return true;
                 } else {
                     throw Error(data.message);
                 }
@@ -279,6 +281,25 @@ const methods = {
                 }
                 buyToRemoveProductFrom.products = resultProducts;
             })
+            .catch(function (err) {
+                console.log('Fetch Error :-S', err);
+            });
+    },
+    getProductTimelineInfo(productRequestInfo: ProductTimelineRequestInfo) {
+        let { name, measure, shopName } = productRequestInfo;
+
+        if (!(name && measure && shopName)) {
+            console.log('Not enough data provided for requesting product timeline.');
+            console.log(`Provided data: name: ${name}, measure: ${measure}, shopName: ${shopName}`);
+            return false;
+        }
+
+        const nameEncoded = encodeURIComponent(name);
+        const shopNameEncoded = encodeURIComponent(shopName);
+        let url = `name=${nameEncoded}&measure=${measure}&shopName=${shopNameEncoded}`;
+ 
+        return getProductTimelineData(url)
+            .then((data: ProductWithDate[]) => data)
             .catch(function (err) {
                 console.log('Fetch Error :-S', err);
             });
