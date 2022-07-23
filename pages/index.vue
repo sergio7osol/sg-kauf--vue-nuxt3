@@ -1,36 +1,29 @@
+<script setup lang="ts">
+  import store from '@/store/default';
+
+  provide('store', store); 
+</script>  
+
 <template>
   <div class="main-content__left-menu">
-    <LeftMenu /> <!-- :selected-date='activeDate' @date-selected='getDate' :key='Date.now()' -->
+    <LeftMenu />
   </div>
   <div class="main-content__body col">
-    <BuySection  /> <!-- :dateBuys="activeDateBuys" @save-product="saveProduct" @remove-product="removeProduct" -->
+    <BuySection />
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, provide } from 'vue';
-import store from '@/store/default';
-import BuySection from '@/components/BuySection/BuySection';
-import LeftMenu from '@/components/LeftMenu/LeftMenu';
 
-export default defineComponent({
-  name: 'main-page',
-  components: { LeftMenu, BuySection },
-  setup() {
-    provide('store', store);
-
-    return {}
-  },
-  created: function () {
-    // this.getProductNames();
-    // this.getProductDefaults();
-  }
-});
-</script>
-
+ 
 <style lang="scss">
-@use 'assets/styles/variables' as *;
+@use 'assets/styles/variables';
 
+.main-content {
+  padding-top: 3.5rem;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
 .main-content {
   &__left-menu {
     flex-grow: 0;
@@ -39,7 +32,7 @@ export default defineComponent({
     padding-right: 1.1rem;
     position: relative;
     z-index: 1;
-    background-color: $default-menu-bg-color;
+    background-color: variables.$default-menu-bg-color;
     //&::before {
     //  content: "";
     //  position: absolute;
@@ -50,13 +43,13 @@ export default defineComponent({
     //  left: 0;
     //}
   }
-
   &__body {
     flex-grow: 1;
     padding: .5rem 1rem;
     overflow: auto;
     background: url(~~/assets/images/dotted-bg.webp) no-repeat top left transparent;
     background-size: cover;
+
     &:before {
       content: "";
       position: absolute;

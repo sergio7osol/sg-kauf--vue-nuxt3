@@ -2,8 +2,8 @@
   <h1>List of posts</h1>
   <section class="featured-posts">
     <ul class="featured-posts__list">
-      <li class="featured-posts__item" v-for="id of ids">
-        <nuxt-link :to="{ name: 'blog-posts-id', params: { id: id } }">
+      <li class="featured-posts__item" v-for="id of ids" :key="id">
+        <nuxt-link :to="{ name: 'blog-posts-id', params: { id } }">
           <PostPreview :title="'Some title' + id" />
         </nuxt-link>
       </li>

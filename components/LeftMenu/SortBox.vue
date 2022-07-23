@@ -1,39 +1,34 @@
+<script setup lang="ts">
+  import type SortOrder from '~~/types/SortOrder';
+
+  const { activeSortOrder } = defineProps<{
+    activeSortOrder: SortOrder
+  }>();
+  defineEmits<{
+    (e: '@sort-order', direction: SortOrder): void;
+  }>();
+</script>
+
 <template>
   <div class="sort-box">
     <button
         class="btn btn-secondary sort-box__ctrl"
         :class="{ 'sort-box__ctrl--active': activeSortOrder === 'ascend' }"
-        @click="$emit('sort-order', 'ascend')"
+        @click="$emit('@sort-order', 'ascend')"
     >
       &uarr;
     </button>
     <button
         class="btn btn-secondary sort-box__ctrl"
         :class="{ 'sort-box__ctrl--active': activeSortOrder === 'descend' }"
-        @click="$emit('sort-order', 'descend')"
+        @click="$emit('@sort-order', 'descend')"
     >
       &darr;
     </button>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue';
-import SortOrder from '@/types/SortOrder';
-
-export default defineComponent({
-  name: 'SortBox',
-  props: {
-    activeSortOrder: {
-      type: String as PropType<SortOrder>,
-      required: true
-    }
-  },
-  emits: ['sort-order']
-});
-</script>
-
-<style lang="scss">
+<style scoped lang="scss">
 @use 'assets/styles/variables';
 
 .sort-box {

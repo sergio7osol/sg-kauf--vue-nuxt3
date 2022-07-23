@@ -1,17 +1,17 @@
 <template>
-  <div class="main-container">
+  <div id="main-container" class="main-container">
     <MainHeader />
-    <div class="main-content">
+    <main class="main-content">
       <slot />
-    </div>
+    </main>
   </div>
 </template>
 
 <style lang="scss">
-.main-content {
-  padding-top: 3.5rem;
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-}
+  .main-content {
+    padding-top: 3.5rem;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
 </style>

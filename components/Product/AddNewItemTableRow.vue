@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { ref, Ref, ShallowUnwrapRef } from 'vue';
   import Product from '@/types/Product';
   import SgKaufState from '@/types/SgKaufState';
+  import type { Ref, ShallowUnwrapRef } from 'vue';
 
   const { date, time } = defineProps<{ 
     date: string,
@@ -10,7 +10,7 @@
 
   const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState>, methods: { saveProduct: Function } };
     const { ValueCollection, findDefaultValue } = useCollectionDefaults();
-    const newProduct = reactive<Product>({
+    const newProduct: Product = reactive({
       name: '',
       price: 0,
       weightAmount: 0,
@@ -162,7 +162,7 @@
 </template>
 
 <style scoped lang="scss">
-@use '../../assets/styles/variables';
+  @use '../../assets/styles/variables';
   .buy-table {
     &__cell {
       vertical-align: middle;

@@ -17,6 +17,9 @@
             <NuxtLink class="nav-link" :to="{ name: 'weather' }">Weather</NuxtLink>
           </li>
           <li class="nav-item">
+            <NuxtLink class="nav-link" :to="{ name: 'weather-id', params: { id: 5 } }">Weather_1</NuxtLink>
+          </li>
+          <li class="nav-item">
             <NuxtLink class="nav-link" :to="{ name: 'weather-_month' }">Month</NuxtLink>
           </li>
           <li class="nav-item">
@@ -37,7 +40,7 @@
           <li class="nav-item">
             <form class="d-flex">
               <input class="form-control form-control-dark w-100 me-2" placeholder="Search" aria-label="Search" type="text">
-              <button class="btn btn-secondary" @click="$router.push('/weather')" type="submit">Search</button>
+              <button class="btn btn-secondary" @click="goToWeatherPage" type="submit">Search</button>
             </form>
           </li>
         </ul>
@@ -51,9 +54,22 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { useRoute } from 'vue-router';
 
 export default defineComponent({
-  name: 'MainHeader'
+  name: 'MainHeader',
+  setup() {
+    const goToWeatherPage = () => {
+      // $router.push('/weather')
+      const route = useRoute();
+      console.log('Route: ', route.params.id);
+
+    };
+
+    return {
+      goToWeatherPage
+    }
+  }
 })
 </script>
 

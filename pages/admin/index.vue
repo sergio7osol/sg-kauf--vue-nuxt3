@@ -10,14 +10,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  components: {
-    PostList
-  }
-}
-</script>
-
 <style scoped lang="scss">
 .new-post {
   border: 1px solid yellowgreen;

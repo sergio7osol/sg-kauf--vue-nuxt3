@@ -60,7 +60,7 @@ export default defineComponent({
   components: { Datepicker },
   setup() {
     const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState>, methods: { getRangeSum: Function, getWholeSum: Function } };
-    // const dateRange = reactive<DateRange>({
+    // const dateRange: DateRange = reactive({
     // });
     const from = ref<Date>(new Date(2021, 0, 15));
     const to = ref<Date>(new Date());

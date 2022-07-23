@@ -1,16 +1,15 @@
 <script setup lang="ts">
-  import SortBox from '@/components/LeftMenu/SortBox';
-  import useShoppingDates from '@/composables/useShoppingDates';
-  import useSortShoppingDates from '@/composables/useSortShoppingDates';
-  import useActiveDateBuys from '@/composables/useActiveDateBuys';
-  // import getMonthString from "@/utils/getMonthString";
-  import DetailedDateInfo from "@/types/DetailedDateInfo";
-
-  const { shoppingDates } = useShoppingDates();
-  const { sortOrder, sortedShoppingDates, changeSortOrder } = useSortShoppingDates(shoppingDates);
+  import useShoppingDates from '~~/composables/useShoppingDates';
+  import useSortShoppingDates from '~~/composables/useSortShoppingDates';
+  import useActiveDateBuys from '~~/composables/useActiveDateBuys';
+  // import getMonthString from "@/utils/getMonthString"; 
+  import type DetailedDateInfo from "~~/types/DetailedDateInfo";
+  
+  const { shoppingDates } = useShoppingDates(); 
+  const { sortOrder, sortedShoppingDates, changeSortOrder } = useSortShoppingDates(shoppingDates); 
   const { activeDate, setActiveDate, loadingDate, setLoadingDate } = useActiveDateBuys();
   const chooseDate = (date: string) => {
-    setLoadingDate(date);
+    setLoadingDate(date); 
     setActiveDate(date);
   }
   const countProducts = (date: DetailedDateInfo): number => {
@@ -28,16 +27,9 @@
   };
 </script>
 
-<script lang="ts">
-export default defineComponent({
-  name: 'LeftMenu',
-  components: { SortBox }
-})
-</script>
-
 <template>
   <nav id="sidebarMenu" class="d-md-block sidebar collapse vertical-menu pt-3 pb-3">
-      <SortBox :active-sort-order="sortOrder" @sort-order="changeSortOrder($event)" />
+      <LeftMenuSortBox :active-sort-order="sortOrder" @@sort-order="changeSortOrder($event)" />
       <ul class="nav flex-column vertical-menu__list">
         <li class="nav-item vertical-menu__item" v-for="item in sortedShoppingDates" :key="item.date">
           <!-- <span v-if="item.year" class="vertical-menu__item-year">{{ item.year }}</span> -->
@@ -93,11 +85,11 @@ export default defineComponent({
       position: relative;
       z-index: 2;
       padding: 20px 30px 19px 70px;
-      font-size: 18px;
+      font-size: $default-menu-f-size;
       font-family: UniversLT-Condensed, "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
       font-weight: normal;
       font-style: normal;
-      color: #fff;
+      color: $default-menu-color;
       text-decoration: none;
       text-transform: uppercase;
       border-bottom: 1px solid #777;
