@@ -21,7 +21,7 @@
           <p>from - to</p>
           <datepicker
               v-model="from"
-              inputFormat="dd.MM.yyyy"
+              input-format="dd.MM.yyyy"
           />
           <!--
               :upperLimit="to"

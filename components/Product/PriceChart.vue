@@ -95,7 +95,11 @@
 
 <template>
   <div>
-    <highchart :options="chartOptions" :update="['options.title', 'options.series']" />
+    <highchart 
+      :options="chartOptions" 
+      :update="['options.title', 'options.series']"
+      :dismissable-mask="true"
+    />
   </div>
 </template>
 

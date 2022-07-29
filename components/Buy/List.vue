@@ -17,7 +17,7 @@
   </h4>
   <ul class="buy-section__list item-list">
     <li class="buy" v-for="buy in activeDate.buys" :key="buy.date">
-      <BuyItem :buyData="buy" />
+      <BuyItem :buy-data="buy" />
     </li>
   </ul>
 </template>

@@ -57,11 +57,12 @@ const graphShown = ref(false);
         class="p-button-rounded p-button-text"
       />
       <ProductPriceChartDialog 
-        :showDialog="graphShown" 
-        :productName="product.name"  
+        :show-dialog="graphShown" 
+        :product-name="product.name"  
         :measure="product.measure"
-        :shopName="shopName"      
-        @@close-dialog="graphShown = false" />
+        :shop-name="shopName"      
+        @@close-dialog="graphShown = false" 
+      />
     </td>
   </tr>
 </template>

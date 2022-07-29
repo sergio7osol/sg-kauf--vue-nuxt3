@@ -44,7 +44,7 @@
       class="buy-table__row buy-table__head-row--body" 
       :date="props.buyData.date"
       :time="props.buyData.time"
-      :shopName="props.buyData.shopName"
+      :shop-name="props.buyData.shopName"
       :product="product" 
       :index="index" 
       :key="product.name + index" 
