@@ -4,7 +4,7 @@
   const { activeSortOrder } = defineProps<{
     activeSortOrder: SortOrder
   }>();
-  defineEmits<{
+  const emit = defineEmits<{
     (e: '@sort-order', direction: SortOrder): void;
   }>();
 </script>
@@ -14,14 +14,14 @@
     <button
         class="btn btn-secondary sort-box__ctrl"
         :class="{ 'sort-box__ctrl--active': activeSortOrder === 'ascend' }"
-        @click="$emit('@sort-order', 'ascend')"
+        @click="emit('@sort-order', 'ascend')"
     >
       &uarr;
     </button>
     <button
         class="btn btn-secondary sort-box__ctrl"
         :class="{ 'sort-box__ctrl--active': activeSortOrder === 'descend' }"
-        @click="$emit('@sort-order', 'descend')"
+        @click="emit('@sort-order', 'descend')"
     >
       &darr;
     </button>

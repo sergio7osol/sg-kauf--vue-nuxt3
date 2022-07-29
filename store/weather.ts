@@ -4,7 +4,7 @@ import WeatherState from '@/types/WeatherState';
 import WeatherInfo from "@/types/WeatherInfo";
 import WeatherError from "@/types/WeatherError";
 
-const state = reactive<WeatherState>({
+const state: WeatherState = reactive({
     weatherData: [] as WeatherInfo[]
 });
 

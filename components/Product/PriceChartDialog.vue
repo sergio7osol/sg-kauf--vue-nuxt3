@@ -11,9 +11,9 @@
 		measure: Measure,
 		shopName: ShopName
 	}>();
-	defineEmits<{
-		(e: '@close-dialog'): void;
-	}>();
+	const emit = defineEmits<{
+		(e: '@close-dialog'): void; 
+	}>(); 
 
 	const store = inject("store") as {
 		state: ShallowUnwrapRef<SgKaufState>;
@@ -22,7 +22,7 @@
 				productRequestInfo: ProductTimelineRequestInfo
 			) => Promise<ProductWithDate[]>;
 		};
-	}; // TODO: set correct type
+	}; // TODO: set correct type 
 
 	const priceTimeline = ref<[number, number][]>([]);
     
@@ -62,35 +62,22 @@
 			});
 	};
 
-	watch(props, (newValue, oldValue) => {
-		const { productName: oldName, measure: oldMeasure, shopName: oldShopName } = oldValue;
-		const { productName, measure, shopName } = newValue;
-		console.log('name, measure, shopName: ', productName, measure, shopName);
-		console.log('OLD name, measure, shopName: ', oldName, oldMeasure, oldShopName);
-		showComparisonGraph({ name: props.productName, measure: props.measure, shopName: props.shopName });
+	watch(props, ({ productName, measure, shopName }) => {
+		showComparisonGraph({ name: productName, measure, shopName });
 	});
 </script>
 
 <template>
 	<Dialog v-model:visible="showDialog" :breakpoints="{ '960px': '75vw', '640px': '90vw' }" :style="{ width: '50vw' }"
 		:maximizable="true" :modal="true">
-		<template #header>
-			<h3>Header</h3>
-		</template>
-
-		<h5>
-			Graphic timeline: {{ store.state.activeDate.date }}
-			<h1 style="display: inline-block; margin-left: 1rem">
-				<b>{{ priceTimeline.length }}</b>
-			</h1>
-		</h5>
-		<ol>
-			<li v-for="buy in priceTimeline" :key="Date.now()">{{ new Date(buy[0]).toDateString() }}</li>
-		</ol>
+		<p>Active date: {{ store.state.activeDate.date }}</p>
+		<p>
+			<b>{{ priceTimeline.length }}</b> buys
+		</p>
 		<ProductPriceChart :chart-data="priceTimeline" :product-name="productName" :shop-name="props.shopName" />
 
 		<template #footer>
-			<Button label="Close" icon="pi pi-times" @click="$emit('@close-dialog')" autofocus />
+			<Button label="Close" icon="pi pi-times" @click="emit('@close-dialog')" autofocus />
 			<!-- <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="" /> -->
 		</template>
 	</Dialog>
