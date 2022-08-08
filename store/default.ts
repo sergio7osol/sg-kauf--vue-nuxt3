@@ -1,4 +1,5 @@
 import { reactive, readonly } from 'vue';
+import type { InjectionKey } from 'vue';
 import { find } from 'lodash';
 
 import {
@@ -16,6 +17,7 @@ import {
     fetchWeatherForecast
 } from '@/services/ShoppingDateService';
 import type SgKaufState from '@/types/SgKaufState';
+import type SgKaufMethods from '@/types/SgKaufMethods';
 import type DetailedDateInfo from "@/types/DetailedDateInfo";
 import type BuyInfo from "@/types/BuyInfo";
 import type ResponseInfo from "@/types/ResponseInfo";
@@ -23,6 +25,14 @@ import type Product from "@/types/Product";
 import type PriceInfo from "@/types/PriceInfo";
 import type { ProductTimelineRequestInfo } from '@/types/ProductTimelineInfo';
 import type { ProductWithDate } from '@/types/Product';
+
+interface SgKaufMethodsLocal extends SgKaufMethods {
+    _breakPromiseExecution: () => Promise<false>,
+    _addBuy: (newBuy: BuyInfo, storedDate: DetailedDateInfo | undefined, storedBuy: BuyInfo | undefined) => void,
+    _setCollectionProductNames: (names: string[]) => void,
+    _setCollectionOfProductDescriptions: (descriptions: string[]) => void,
+    _setCollectionProductDefaults: (defaults: (string | Product)[]) => void
+}
 
 const state: SgKaufState = reactive({
     shoppingDates: [],
@@ -36,7 +46,7 @@ const state: SgKaufState = reactive({
     }
 });
 
-const methods = {
+const methods: SgKaufMethodsLocal = {
     setShoppingDates (newShoppingDates: DetailedDateInfo[]) {
         state.shoppingDates = newShoppingDates;
     },
@@ -196,24 +206,24 @@ const methods = {
                 console.log("getProductDefaults, Fetch Error :-S", err);
             });
     },
-    saveProduct(date: string, time: string, productInfo: Product, toDefault: boolean) {
+    saveProduct(date: string, time: string, productInfo: Product, toDefault: boolean): Promise<boolean> {
         let { name, price, weightAmount, measure, description, discount } = productInfo;
 
         const dateToAddProductTo = state.shoppingDates.find(shoppingDate => shoppingDate.date === date);
         if (!dateToAddProductTo) {
             console.error(`Date ${date} to add the product to - is not found`);
-            return false;
+            return methods._breakPromiseExecution();
         }
-        const buyToAddProductTo = dateToAddProductTo.buys?.find(buy => buy.time === time);
+        const buyToAddProductTo = dateToAddProductTo?.buys?.find(buy => buy.time === time);
         if (!buyToAddProductTo) {
             console.error(`Buy at ${time} to add the product to - is not found`);
-            return false;
+            return methods._breakPromiseExecution();
         }
         const existingProducts = buyToAddProductTo.products = buyToAddProductTo.products || [];
 
         if (find(existingProducts, productInfo)) {
             console.warn(`Product array already has such a product: ${productInfo.name}. Product will NOT be added. Returning...`);
-            return false;
+            return methods._breakPromiseExecution();
         }
 
         name = encodeURIComponent(name);
@@ -231,12 +241,11 @@ const methods = {
                 buyToAddProductTo.products = data;
                 // react to changed products if same date is active
                 // thisApp.displayNewProductState(thisApp.activeDateBuys, buyToAddProductTo, dateToAddProductTo, 'add');
-                return new Promise(resolve => {
-                    resolve(true);
-                });
+                return true;
             })
             .catch(function (err) {
                 console.log('Fetch Error :-S', err);
+                return false;
             });
     },
     removeProduct(date: string, time: string, productInfoForRemove: Product) {
@@ -291,7 +300,7 @@ const methods = {
         if (!(name && measure && shopName)) {
             console.log('Not enough data provided for requesting product timeline.');
             console.log(`Provided data: name: ${name}, measure: ${measure}, shopName: ${shopName}`);
-            return false;
+            return methods._breakPromiseExecution();
         }
 
         const nameEncoded = encodeURIComponent(name);
@@ -299,9 +308,10 @@ const methods = {
         let url = `name=${nameEncoded}&measure=${measure}&shopName=${shopNameEncoded}`;
  
         return getProductTimelineData(url)
-            .then((data: ProductWithDate[]) => data)
+            .then((data: ProductWithDate[] | false) => data)
             .catch(function (err) {
                 console.log('Fetch Error :-S', err);
+                return false;
             });
     },
     getRangeSum(dataSuffix: string) {
@@ -323,6 +333,9 @@ const methods = {
             .catch(function(err) {
                 console.log('getWholeSum', 'Fetch Error :-S', err);
             });
+    },
+    _breakPromiseExecution() { 
+        return Promise.resolve(false); 
     },
     _addBuy(newBuy: BuyInfo, storedDate: DetailedDateInfo | undefined, storedBuy: BuyInfo | undefined) {
         if (!storedDate) {
@@ -357,11 +370,10 @@ const methods = {
     },
 }
 
+export const storeInjectionKey = readonly(Symbol() as InjectionKey<SgKaufState>);
 export default {
     state: readonly(state),
     methods
 }
-
-// export const modules = {}
 
 

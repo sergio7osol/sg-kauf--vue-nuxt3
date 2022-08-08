@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ShallowUnwrapRef } from "vue";
-import type SgKaufState from "~~/types/SgKaufState";
-import type Product from "~~/types/Product";
-import type { ProductTimelineRequestInfo } from "~~/types/ProductTimelineInfo";
-import { ShopName } from "~~/types/StaticBuyInfoTypes";
+import { storeInjectionKey } from '~~/store/default';
 import { ProductPriceChartDialog } from '../../.nuxt/components';
+import type SgKaufState from "~~/types/SgKaufState";
+import type SgKaufMethods from '~~/types/SgKaufMethods';
+import type Product from "~~/types/Product";
+import type { ShopName } from "~~/types/StaticBuyInfoTypes";
 
 const { date, time, shopName } = defineProps<{
   date: string;
@@ -13,25 +13,10 @@ const { date, time, shopName } = defineProps<{
   product: Product;
   index: number;
 }>();
-
-const store = inject("store") as {
-  state: ShallowUnwrapRef<SgKaufState>;
-  methods: {
-    removeProduct: (
-      date: string,
-      time: string,
-      productInfoForRemove: Product
-    ) => Promise<boolean> | void;
-  };
-}; // TODO: set correct type
-const sendProductToRemove = (
-  date: string,
-  time: string,
-  productInfoForRemove: Product
-) => {
-  store.methods.removeProduct(date, time, productInfoForRemove);
+const store = inject(storeInjectionKey) as {
+  state: SgKaufState,
+  methods: SgKaufMethods
 };
-
 const graphShown = ref(false);
 </script>
 
@@ -49,7 +34,7 @@ const graphShown = ref(false);
     <td class="buy-table__cell buy-table__cell--actions buy-table__head-cell--body"> 
       <button
         class="btn btn--icon-remove"
-        @click.prevent="sendProductToRemove(date, time, product)"
+        @click.prevent="store.methods.removeProduct(date, time, product)"
       ></button>
       <Button 
         @click="graphShown = !graphShown;"

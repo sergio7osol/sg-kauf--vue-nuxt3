@@ -1,12 +1,12 @@
-import {
-    computed,
-    ShallowUnwrapRef
-} from 'vue';
-
-import SgKaufState from "@/types/SgKaufState";
+import { storeInjectionKey } from '~~/store/default';
+import SgKaufState from "~~/types/SgKaufState";
+import SgKaufMethods from '~~/types/SgKaufMethods';
 
 export default function useActiveDateBuys() {
-    const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState>, methods: { setActiveDate: Function, setLoadingDate: Function } }; // TODO: set correct type
+    const store = inject(storeInjectionKey) as {
+      state: SgKaufState;
+      methods: SgKaufMethods
+    }; // TODO: set correct type
     const activeDate = computed(() => store.state.activeDate);
     const loadingDate = computed(() => store.state.loadingDate);
     const setActiveDate = (newDate: string) => {

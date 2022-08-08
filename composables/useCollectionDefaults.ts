@@ -1,14 +1,13 @@
-import {
-    onMounted,
-    toRefs,
-    inject,
-    ShallowUnwrapRef
-} from 'vue';
-import SgKaufState from '@/types/SgKaufState';
-import Product from "@/types/Product";
+import { storeInjectionKey } from '~~/store/default';
+import Product from "~~/types/Product";
+import type SgKaufState from '~~/types/SgKaufState';
+import type SgKaufMethods from '~~/types/SgKaufMethods';
 
 export default function useCollectionDefaults() {
-    const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState>, methods: { fetchProductNames: Function, fetchProductDescriptions: Function, fetchProductDefaults: Function } };
+    const store = inject(storeInjectionKey) as {
+        state: SgKaufState,
+        methods: SgKaufMethods
+    };
     const { ValueCollection } = toRefs(store.state);
     const { fetchProductNames, fetchProductDescriptions, fetchProductDefaults } = store.methods;
     const findDefaultValue = (event: Event): Product | string => {

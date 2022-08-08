@@ -4,7 +4,7 @@
   import SgKaufState from '~~/types/SgKaufState';
   import type BuyInfo from '~~/types/BuyInfo';
 
-  const props = defineProps<{ 
+  defineProps<{ 
     buyData: BuyInfo
   }>();
 
@@ -15,16 +15,16 @@
 <template>
   <table class="table table-striped product-list__items buy-table">
     <caption class="buy-table__caption">
-      {{ props.buyData.time }},
-      {{ props.buyData.address.country }}
-      {{ props.buyData.address.index }}
-      {{ props.buyData.address.city }}
-      {{ props.buyData.address.street }}
-      {{ props.buyData.address.houseNumber }},
-      {{ props.buyData.shopName }}
-      - {{ props.buyData.payMethod }} -
-      {{ props.buyData.currency }}
-      <button class="btn btn--icon-remove" @click="remove(props.buyData)"></button>
+      {{ buyData.time }},
+      {{ buyData.address.country }}
+      {{ buyData.address.index }}
+      {{ buyData.address.city }}
+      {{ buyData.address.street }}
+      {{ buyData.address.houseNumber }},
+      {{ buyData.shopName }}
+      - {{ buyData.payMethod }} -
+      {{ buyData.currency }}
+      <button class="btn btn--icon-remove" @click="remove(buyData)"></button>
     </caption>
     <thead class="product product--default buy-table__head">
     <tr class="buy-table__row buy-table__head-row--head">
@@ -39,12 +39,12 @@
     </tr> 
     </thead>
     <tbody class="product">
-    <ProductAddNewItemTableRow :date="props.buyData.date" :time="props.buyData.time" :key="Date.now()" />
-    <ProductItem v-for="(product, index) in props.buyData.products" 
+    <ProductAddNewItemTableRow :date="buyData.date" :time="buyData.time" :key="Date.now()" />
+    <ProductItem v-for="(product, index) in buyData.products" 
       class="buy-table__row buy-table__head-row--body" 
-      :date="props.buyData.date"
-      :time="props.buyData.time"
-      :shop-name="props.buyData.shopName"
+      :date="buyData.date"
+      :time="buyData.time"
+      :shop-name="buyData.shopName"
       :product="product" 
       :index="index" 
       :key="product.name + index" 
