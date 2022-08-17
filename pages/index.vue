@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import store from '@/store/default';
+  import store, { storeInjectionKey } from '@/store/default';
 
-  provide('store', store); 
+  provide(storeInjectionKey, store); 
 </script>  
 
 <template>

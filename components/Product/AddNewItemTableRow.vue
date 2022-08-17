@@ -1,69 +1,75 @@
 <script setup lang="ts">
+  import { storeInjectionKey } from '~~/store/default';
   import Product from '@/types/Product';
-  import SgKaufState from '@/types/SgKaufState';
-  import type { Ref, ShallowUnwrapRef } from 'vue';
+  import type SgKaufState from '@/types/SgKaufState';
+  import type SgKaufMethods from '~~/types/SgKaufMethods';
+  import type { Ref } from 'vue';
 
   const { date, time } = defineProps<{ 
     date: string,
     time: string
   }>();
 
-  const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState>, methods: { saveProduct: Function } };
-    const { ValueCollection, findDefaultValue } = useCollectionDefaults();
-    const newProduct: Product = reactive({
-      name: '',
-      price: 0,
-      weightAmount: 0,
-      measure: 'piece',
-      description: '',
-      discount: 0
-    });
-    const toDefault = ref<boolean>(false);
-    const productNameTextField = ref<HTMLElement | null>(null);
-    const saveProductButton = ref<HTMLElement | null>(null);
-    const sendProductToSave = () => {
-      const { name, price, weightAmount, measure, description, discount } = newProduct;
-      if (!name || !price || !weightAmount || !measure) {
-        return console.warn('Name, price, weight/amount are required attributes and should be provided for saving a product. Returning...');
-      }
+  const store = inject(storeInjectionKey) as {
+    state: SgKaufState,
+    methods: SgKaufMethods
+  };
+  const { ValueCollection, findDefaultValue } = useCollectionDefaults();
+  const newProduct: Product = reactive({
+    name: '',
+    price: 0,
+    weightAmount: 0,
+    measure: 'piece',
+    description: '',
+    discount: 0
+  });
+  const toDefault = ref<boolean>(false);
+  const productNameTextField = ref<HTMLInputElement | null>(null);
+  const saveProductButton = ref<HTMLButtonElement | null>(null);
+  const sendProductToSave = () => {
+    const { name, price, weightAmount, measure, description, discount } = newProduct;
+    if (!name || !price || !weightAmount || !measure) {
+      return console.warn('Name, price, weight/amount are required attributes and should be provided for saving a product. Returning...');
+    }
 
-      focusRefElement(productNameTextField);
+    focusRefElement(productNameTextField);
 
-      store.methods.saveProduct(date, time, {...newProduct}, toDefault.value)
-        .then((data: boolean) => {
+    store.methods.saveProduct(date, time, {...newProduct}, toDefault.value)
+      .then((data: boolean) => {
+        if (data) {
           newProduct.name = '';
           newProduct.price = 0;
           newProduct.weightAmount = 0;
           newProduct.measure = 'piece';
           newProduct.description = '';
           newProduct.discount = 0;
-        });
-    };
-    const focusRefElement = (refElement: Ref<HTMLElement | null>) => {
-      refElement.value?.focus();
-    };
-    const productAutocomplete = (event: Event) => {
-      const foundDefault = findDefaultValue(event);
-      if (typeof foundDefault === 'object') {
-        newProduct.name = foundDefault.name;
-        newProduct.price = foundDefault.price || 0;
-        newProduct.weightAmount = foundDefault.weightAmount || 1;
-        newProduct.measure = foundDefault.measure || 'piece';
-        newProduct.description = foundDefault.description || '';
-        newProduct.discount = foundDefault.discount || 0;
-        focusRefElement(saveProductButton);
-      } else {
-        newProduct.name = foundDefault;
-        newProduct.price = 0;
-        newProduct.weightAmount = 0;
-        newProduct.measure = 'piece';
-        newProduct.description = '';
-        newProduct.discount = 0;
-      }
-    };
-    onMounted(() => {
-      focusRefElement(productNameTextField);
-    })
+        }
+      });
+  };
+  const focusRefElement = (refElement: Ref<HTMLInputElement | HTMLButtonElement | null>) => refElement.value?.focus();
+  const productAutocomplete = (event: Event) => {
+    const foundDefault = findDefaultValue(event);
+    if (typeof foundDefault === 'object') {
+      newProduct.name = foundDefault.name;
+      newProduct.price = foundDefault.price || 0;
+      newProduct.weightAmount = foundDefault.weightAmount || 1;
+      newProduct.measure = foundDefault.measure || 'piece';
+      newProduct.description = foundDefault.description || '';
+      newProduct.discount = foundDefault.discount || 0;
+      focusRefElement(saveProductButton);
+    } else {
+      newProduct.name = foundDefault;
+      newProduct.price = 0;
+      newProduct.weightAmount = 0;
+      newProduct.measure = 'piece';
+      newProduct.description = '';
+      newProduct.discount = 0;
+    }
+  };
+
+  onMounted(() => {
+    focusRefElement(productNameTextField);
+  });
 </script>
 
 <template>
@@ -87,12 +93,10 @@
       </datalist>
     </td>
     <td class="buy-table__cell buy-table__head-cell--body">
-      <input
-          class="form-control product-info__price"
-          v-model.number="newProduct.price"
-          placeholder="Price"
-          step="0.01"
-          type="number"
+      <PriceInput 
+        placeholder="Price"
+        :value="newProduct.price"
+        @@price-changed="newProduct.price = $event"
       />
     </td>
     <td class="buy-table__cell buy-table__head-cell--body">
