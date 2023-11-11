@@ -1,9 +1,13 @@
 <script setup lang="ts">
-  import { ShallowUnwrapRef } from 'vue';
-  import SgKaufState from '@/types/SgKaufState';
-  import BuyInfo from '@/types/BuyInfo';
+  import { storeInjectionKey } from '~~/store/default';
+  import type BuyInfo from '~~/types/BuyInfo';
+  import type SgKaufState from '~~/types/SgKaufState';
+  import type SgKaufMethods from '~~/types/SgKaufMethods';
 
-  const store = inject('store') as { state: ShallowUnwrapRef<SgKaufState>, methods: { saveBuy: Function } }; // TODO: set correct type
+  const store = inject(storeInjectionKey) as {
+    state: SgKaufState,
+    methods: SgKaufMethods
+  };
   const initState: BuyInfo = {
       date: '',
       time: "00:00",
@@ -36,11 +40,11 @@
   });
   const StaticValueCollection = { // TODO: move to server
     countries: ['Germany', 'Russia', 'online'],
-    shopNames: ['REWE', 'ALDI', 'Kaufland', 'Lidl', 'PENNY', 'Amazon.de', 'Netflix.com', 'Edeka', 'IKEA', 'BAUHAUS', 'OBI', 'ROHLFS BÄCKEREI KONDITOREI GmbH', 'Apotheke a.d. Friedenseiche Nikolaus Wendel', 'About you', 'Netflix', 'Innovativelanguage.com', 'Mango', 'OVB', 'Vodavone GmbH', 'Telekom Deutschland GmbH', 'Ernst Scholz', 'Sparkasse', 'Apotheke in der Marktplatz Galerie', 'easyApotheke', ''],
-    indexes: ['22307', '22529', '22299', '20251', '22761', '22301', '20249', '22459', '22525', '22041', '22177', '22179', '22457', 'online', ''],
+    shopNames: ['REWE', 'ALDI', 'Kaufland', 'Lidl', 'PENNY', 'Amazon.de', 'Netflix.com', 'Edeka', 'IKEA', 'BAUHAUS', 'OBI', 'ROHLFS BÄCKEREI KONDITOREI GmbH', 'Apotheke a.d. Friedenseiche Nikolaus Wendel', 'About you', 'Netflix', 'Innovativelanguage.com', 'Mango', 'OVB', 'Vodavone GmbH', 'Telekom Deutschland GmbH', 'Ernst Scholz', 'Sparkasse', 'Apotheke in der Marktplatz Galerie', 'easyApotheke', 'Fahrschule Altona', ''],
+    indexes: ['22307', '22529', '22299', '20251', '22761', '22765', '22301', '20249', '22459', '22525', '22041', '22177', '22179', '22457', 'online', ''],
     cities: ['Hamburg', 'Moscow', 'Saransk', 'online', ''],
-    streets: ['Alte Kollaustraße', 'Fuhlsbuettler Str.', 'Troplowitzstrasse', 'Osterfeldestrasse', 'Wunderbrunnen', 'Winterhuder Marktplatz', 'Eppendorfer Marktplatz', 'Stresemannstrasse', 'Nedderfeld', 'Dorotheenstrasse', 'Kümmellstraße', 'Kieler Straße', 'Grelckstraße', 'Tibarg', 'Walddörferstraße', 'Eppendorfer Baum', 'Bramfelder Chaussee', 'Bramfelder Dorfplatz', 'online', ''],
-    houseNumbers: ['1', '2', '4-8', '7', '8', '18', '13-15', '30-40', '32', '34', '35', '39', '44/46', '70', '100', '116-122', '146', '230', '300', '595', '387', '579', 'online', ''],
+    streets: ['Alte Kollaustraße', 'Fuhlsbuettler Str.', 'Lobuschstraße', 'Troplowitzstrasse', 'Osterfeldestrasse', 'Wunderbrunnen', 'Winterhuder Marktplatz', 'Eppendorfer Marktplatz', 'Stresemannstrasse', 'Nedderfeld', 'Dorotheenstrasse', 'Kümmellstraße', 'Kieler Straße', 'Grelckstraße', 'Tibarg', 'Walddörferstraße', 'Eppendorfer Baum', 'Bramfelder Chaussee', 'Bramfelder Dorfplatz', 'online', ''],
+    houseNumbers: ['1', '2', '4-8', '7', '8', '18', '13-15', '14', '30-40', '32', '34', '35', '39', '44/46', '70', '100', '116-122', '146', '230', '300', '595', '387', '579', 'online', ''],
     currencies: ['EUR', 'RUB'],
     payMethods: ['EC card', 'Cash', 'N26 card', 'PayPal', 'Amazon VISA']
   };
@@ -64,7 +68,7 @@
     <div class="card-body">
       <div class="buy buy--default">
         <!-- <span class="badge bg-primary rounded-pill buy__badge">{{ item.products ? item.products.length: 0 }}</span> -->
-        <form class="container-fluid">
+        <form class="container-fluid" @submit.prevent="addBuy">
           <div class="row">
             <div class="col buy-info">
               <div class="buy-info__date-and-time">
@@ -102,7 +106,7 @@
                 <option v-for="method in StaticValueCollection.payMethods" :key="method">{{ method }}</option>
               </select>
               <div class="buy-info__buttons">
-                <button class="btn btn-primary btn-md buy-info__btn-add" @click.prevent="addBuy">Add buy</button>
+                <button class="btn btn-primary btn-md buy-info__btn-add">Add buy</button>
               </div>
             </div>
           </div>
